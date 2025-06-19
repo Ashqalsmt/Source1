@@ -231,15 +231,15 @@ async def memes(event):
     pattern="الخطوط(?:\s|$)([\s\S]*)",
     command=("الخطوط", plugin_category),
     info={
-        "header": "لعـرض قائمـة خطـوط ريفز ",
+        "header": "لعـرض قائمـة خطـوط يـــمنثون ",
         "الاستخـدام": "{tr}.الخطوط",
     },
 )
 async def lang(event):
-    "لعـرض قائمـة خطـوط ريفز "
+    "لعـرض قائمـة خطـوط يـــمنثون "
     input_str = event.pattern_match.group(1)
     if not input_str:
-        await event.edit(f"**   ⃟⁞⃟⟢╎قائمـة خطـوط ريفز  هـي :-**\n**قم بنسخ اسم الخط ثم ارسل (.خط + اسم الخط)**\n\n{FONTS}")
+        await event.edit(f"**   ⃟⁞⃟⟢╎قائمـة خطـوط يـــمنثون  هـي :-**\n**قم بنسخ اسم الخط ثم ارسل (.خط + اسم الخط)**\n\n{FONTS}")
         return
     else:
         return
