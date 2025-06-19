@@ -161,7 +161,7 @@ async def startupmessage():
 
                 "https://i.postimg.cc/rpCmq92k/image.jpg",
                 
-                caption="**•⎆┊تـم بـدء تشغـيل سـورس يـــمنثون الخاص بك .. بنجاح ♥️**",
+                caption="**•⎆┊تـم بـدء تشغـيل سـورس يـــمنثون الخاص بك .. بنجاح ♥️**\n**•⎆┊سورس يمنثون يعمل بنجاح يمكنك تصفح اللوامر من خلال إرسال امر .الاوامر**",
                 
                 buttons=[(Button.url("𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉", "https://t.me/YamenThon"),)],
                 
@@ -546,7 +546,7 @@ async def verifyLoggerGroup():
 
         _, groupid = await create_supergroup(
 
-            "كـروب السجـل ريفز", zedub, Config.TG_BOT_USERNAME, descript, photozed
+            "مجموعة السجل يمنثون", zedub, Config.TG_BOT_USERNAME, descript, photozed
 
         )
 
@@ -604,7 +604,7 @@ async def verifyLoggerGroup():
 
         _, groupid = await create_supergroup(
 
-            "كـروب التخـزين", zedub, Config.TG_BOT_USERNAME, descript, photozed
+            "مجموعة التخزين يمنثون", zedub, Config.TG_BOT_USERNAME, descript, photozed
 
         )
 
