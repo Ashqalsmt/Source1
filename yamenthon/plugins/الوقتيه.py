@@ -58,7 +58,7 @@ ZelzalVP_cmd = (
 
 
 # Copyright (C) 2022 @Zed-Thon . All Rights Reserved
-@zedub.zed_cmd(pattern="وقتيه(?:\s|$)([\s\S]*)"
+@zedub.zed_cmd(pattern="وقتيه(?:\s|$)([\s\S]*)")
 async def variable(event):
     input_str = event.pattern_match.group(1)
     zed = await edit_or_reply(event, "**✾╎جـاري اضـافة زخـرفـة الوقتيـه لـ بوتـك 💞🦾 . . .**")
