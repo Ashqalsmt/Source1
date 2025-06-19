@@ -20,7 +20,7 @@ from . import mention
 plugin_category = "utils"
 
 
-@zthon.ar_cmd(pattern="بنك(?:\s|$)([\s\S]*)")
+@zedub.zed_cmd(pattern="بنك(?:\s|$)([\s\S]*)")
 
 async def jokerping(event):
     reply_to_id = await reply_id(event)
