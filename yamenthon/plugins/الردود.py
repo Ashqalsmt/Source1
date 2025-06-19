@@ -161,7 +161,7 @@ async def add_new_filter(event):
         else:
             await edit_or_reply(
                 event,
-                "**❈╎يتطلب رد ميديـا تعيين كـروب السجـل اولاً** .."‚
+                "**❈╎يتطلب رد ميديـا تعيين كـروب السجـل اولاً** .."
             )
             return
     elif msg and msg.text and not string:
