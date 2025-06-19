@@ -542,7 +542,7 @@ async def verifyLoggerGroup():
 
         descript = "لا تقم بحذف هذه المجموعة أو التغيير إلى مجموعة عامه (وظيفتهـا تخزيـن كـل سجـلات وعمليـات البـوت.)"
 
-        photozed = await zedub.upload_file(file="yamenthon/resources/Yemen1.jpg"")
+        photozed = await zedub.upload_file(file="yamenthon/resources/Yemen1.jpg")
 
         _, groupid = await create_supergroup(
 
