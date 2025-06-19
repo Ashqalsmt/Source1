@@ -191,7 +191,7 @@ async def memes(event):
     meme_file = output[1]
     meme = os.path.join("./temp", "catmeme.jpg")
     if gvarstatus("ZED_FONTS") is None:
-        ZED_FONTS = "zthon/helpers/styles/Terserah.ttf"
+        ZED_FONTS = "yamenthon/helpers/styles/Terserah.ttf"
     else:
         ZED_FONTS = gvarstatus("ZED_FONTS")
     if max(len(top), len(bottom)) < 21:
@@ -261,15 +261,15 @@ async def lang(event):
         await event.edit(f"**   ⃟⁞⃟⟢╎قم بكتابة الامـر كالتالـي :**\n`.خط` **+ رقـم الخـط**\n**   ⃟⁞⃟⟢╎لعـرض قائمـة الخطـوط ارسـل** `.الخطوط`")
         return
     if input_str == "عربي":
-        arr = f"zthon/helpers/styles/zarz.ttf"
+        arr = f"yamenthon/helpers/styles/zarz.ttf"
         addgvar("ZED_FONTS", arr)
         await edit_or_reply(event, "**   ⃟⁞⃟⟢╎تم تغييـر خـط كتابـة الحقـوق الـى العربيـة**")
     if input_str not in font_list:
         catevent = await edit_or_reply(event, "**   ⃟⁞⃟⟢╎قم بكتابه اسم الخط بشكل صحيح ...؟!**")
         await asyncio.sleep(1)
-        await catevent.edit(f"**   ⃟⁞⃟⟢╎قائمـة خطـوط ريفز  هـي :-**\n\n{FONTS}")
+        await catevent.edit(f"**   ⃟⁞⃟⟢╎قائمـة خطـوط يمنثون  هـي :-**\n\n{FONTS}")
     else:
-        arg = f"zthon/helpers/styles/{input_str}"
+        arg = f"yamenthon/helpers/styles/{input_str}"
         addgvar("ZED_FONTS", arg)
         await edit_or_reply(event, f"**   ⃟⁞⃟⟢╎تم تغييـر خـط كتابـة الحقـوق الـى :-** `{input_str}`")
 
