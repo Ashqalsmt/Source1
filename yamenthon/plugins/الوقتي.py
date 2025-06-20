@@ -1,14 +1,3 @@
-# refz - senzir
-# Copyright (C) 2023 Refz . All Rights Reserved
-#< https://t.me/def_Zoka >
-# This file is a part of < https://github.com/githupsource/source_reefz/ >
-# PLease read the GNU Affero General Public License in
-# <https://github.com/Dev-senzir/LICINSE/>.
-#كـود الصورة الوقتيه كتـابتي وتعديلـي من زمان ومتعوب عليها 
-#+ كـود زخـرفة الصورة الوقتيه
-#+ دددي لا ابلـع حســابك بـانـد بطـعـم الليمــون 🍋😹🤘
-#سينزر الهيبــه يـ ولــد - حقــوق لـ التــاريـخ ®
-#هههههههههههههههههههههههههههههههههههههههههههههههههه
 
 import asyncio
 import math
