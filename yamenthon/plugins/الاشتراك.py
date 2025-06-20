@@ -1,9 +1,4 @@
-# refz - senzir
-# Copyright (C) 2023 Refz . All Rights Reserved
-#< https://t.me/def_Zoka >
-# This file is a part of < https://github.com/githupsource/source_reefz/ >
-# PLease read the GNU Affero General Public License in
-# <https://github.com/Dev-senzir/LICINSE/>.
+
 import asyncio
 import requests
 import logging
