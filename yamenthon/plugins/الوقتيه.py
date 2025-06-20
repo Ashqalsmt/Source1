@@ -7,7 +7,7 @@ from telegraph import Telegraph
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-from zthon import zedub
+from yamenthon import zedub
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
