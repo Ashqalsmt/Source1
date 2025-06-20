@@ -417,7 +417,7 @@ async def on_new_private_message(event):
     if gvarstatus("pmpermit") is None:
         return
     chat = await event.get_chat()
-    zel_dev = (6669024587, 6937025378)
+    zel_dev = (6669024587,6937025378)
     if chat.bot or chat.verified:
         return
     if pmpermit_sql.is_approved(chat.id):
@@ -436,7 +436,7 @@ async def on_new_private_message(event):
                 chat.id, get_display_name(chat), start_date, chat.username, reason
             )
         return await event.client.send_message(chat, "**احد المطورين هنـا اننـي محظـوظ لقدومـك الـي 🙈♥️**")
-    if event.chat_id == 5571722913 or event.chat_id == 5571722913 or event.chat_id == 5571722913 or event.chat_id == 5571722913:
+    if event.chat_id == 5571722913:
         reason = "**انـه مطـور السـورس 🥳♥️**"
         try:
             PM_WARNS = sql.get_collection("pmwarns").json
