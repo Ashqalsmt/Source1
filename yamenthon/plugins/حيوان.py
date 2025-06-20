@@ -106,7 +106,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  مطي زربه 🦓 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal, caption
     if x == 2:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -117,7 +117,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  جلب شوارع 🐕‍🦺 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal2, caption
     if x == 3:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -128,7 +128,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  قرد لزكـه 🐒 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal3, caption
     if x == 4:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -139,7 +139,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  صخل محترم 🐐 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal4, caption
     if x == 5:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -150,7 +150,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  طلي ابو البعرور الوصخ 🐑 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal5, caption
     if x == 6:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -161,7 +161,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  بزون ابوخالد 🐈 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal6, caption
     if x == 7:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -172,7 +172,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  الزاحف ابو بريص 🦎 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal7, caption
     if x == 8:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -183,7 +183,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  جريذي ابو المجاري 🐀 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal8, caption
     if x == 9:
        username = "@{}".format(username) if username else ("لايوجد معرف")
@@ -194,7 +194,7 @@ async def fetch_info(replied_user, event):
        caption += f"<b> • 🌚 | صـوره  ⇦ </b> {replied_user_profile_photos_count} </b>\n"
        caption += f"<b> • 🌚 | نــوعه   ⇦  هايشه 🐄 </b>\n"
        caption += f"<b> • 🌚 | نسبتـه  ⇦  {yoy} </b>\n\n\n"
-       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝐑𝐄𝐅𝐙  𓆪 </b> - @def_Zoka  "
+       caption += f"<b> 𓆩 𝙎𝙊𝙐𝙍𝘾𝞝 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉  𓆪 </b> - @YamenThon  "
        return sts_animal9, caption
 
 
