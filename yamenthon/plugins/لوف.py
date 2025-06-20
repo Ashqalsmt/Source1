@@ -1,5 +1,3 @@
-# PLUGIN MADE BY @IC_X_K FOR @def_Zoka
-# Senzir
 
 import random, re
 import asyncio
