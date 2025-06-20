@@ -95,7 +95,7 @@ async def _(zthon):
                 cnfrm = await conv.get_response()
                 editfilename = await conv.send_message("نعم")
                 enterfilename = await conv.get_response()
-                filename = await conv.send_message("def_Zoka")
+                filename = await conv.send_message("YamenThon")
                 started = await conv.get_response()
                 pdf = await conv.get_response()
                 await bot.send_read_acknowledge(conv.chat_id)
