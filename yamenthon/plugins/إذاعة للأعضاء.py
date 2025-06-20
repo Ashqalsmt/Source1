@@ -1,9 +1,3 @@
-# refz - senzir
-# Copyright (C) 2023 Refz . All Rights Reserved
-#< https://t.me/YamenThon >
-# This file is a part of < https://github.com/githupsource/source_reefz/ >
-# PLease read the GNU Affero General Public License in
-# <https://github.com/Dev-senzir/LICINSE/>.
 
 import asyncio
 import requests
@@ -38,7 +32,7 @@ ZEDTHON_BEST_SOURCE = "[ᯓ 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - اذاعـة 
 ZEDTHON_PRO_SOURCE = "[ᯓ 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - اذاعـة زاجـل 🕊](t.me/YamenThon) .\n\n**- جـارِ الاذاعـه لـ قائمـة زاجـل 📜\n- الرجـاء الانتظـار .. لحظـات ⏳**"
 ZELZAL_PRO_DEV = "[ᯓ 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - اذاعـة زاجـل 🕊](t.me/YamenThon) .\n⋆┄─┄─┄─┄┄─┄─┄─┄─┄┄⋆\n**    ⃟⁞⃟⟢ ╎قائمـة الاذاعـه فـارغـه ؟! ❌**\n**    ⃟⁞⃟⟢ ╎قم باضافـة يوزرات عبـر الامر**\n`.اضفـ زاجل` **بالـرد ع عدة يوزرات تفـصل بينهم مسـافـات**"
 # =========================================================== #
-#                                      سينزر الهيبـــه - T.me/IC_X_K                                  #
+#                                                                        #
 # =========================================================== #
 #                                      تـاريـخ كتابـة الملـفـ - 7 ابريل/2023                                  #
 # =========================================================== #
