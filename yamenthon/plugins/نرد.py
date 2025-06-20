@@ -1,4 +1,3 @@
-""" ©SENZir™ - @IC_X_K """
 
 import asyncio
 import random
