@@ -1,4 +1,3 @@
-# animation2 code for refz by @IC_X_K
 
 import asyncio
 from collections import deque
