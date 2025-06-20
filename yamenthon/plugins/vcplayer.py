@@ -1,6 +1,4 @@
-#تعريب وتحديث فريق ريفز
-# Refz UsetBot T.me/def_Zoka
-# Devolper Senzir T.me/IC_X_K
+
 import asyncio
 import logging
 
