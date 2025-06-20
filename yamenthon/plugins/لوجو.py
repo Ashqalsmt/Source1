@@ -1,7 +1,4 @@
-"""
-Created by @IC_X_K
-#catuserbot
-"""
+
 
 import asyncio
 import os
