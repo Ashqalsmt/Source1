@@ -1,130 +1,139 @@
-
 import asyncio
-import os
-from telethon import functions, types
-from . import *
+from ..Config import Config
+from ..core.managers import edit_or_reply as eor
+from .. import zedub
+from telethon.errors import FloodWaitError
+
+hl = "."  # البادئة الافتراضية للأوامر (مثل .سبام)
+
+plugin_category = "الإسبام"
 
 
-@zthon(pattern="اسبام(?:\s|$)([\s\S]*)")
+@zedub.zed_cmd(pattern="سبام(?:\s|$)([\s\S]*)")
 async def spammer(event):
+    """إرسال رسالة عدد معين من المرات (حتى 100)"""
     lg_id = Config.LOGGER_ID
     msg_ = event.text[6:]
-    counter = int(msg_.split(" ")[0])
-    spam_message = msg_.replace(str(counter), "")
+    try:
+        counter = int(msg_.split(" ")[0])
+        spam_message = msg_.replace(str(counter), "").strip()
+    except:
+        return await eor(event, f"الاستخدام: `{hl}سبام 10 مرحباً`")
+    
     reply_message = await event.get_reply_message()
     if counter > 100:
-        return await eor(event, f"لإرسال رسائل غير مرغوب فيها أكثر من 100 مرة، استخدم: \n`{hl}bigspam {counter} {spam_message}`")
-    hell = await eor(event, f"Spamming {counter} times...")
-    for i in range(counter):
+        return await eor(event, f"❗ لإرسال أكثر من 100 رسالة، استخدم:\n`{hl}سبام_كبير العدد النص`")
+    msg = await eor(event, f"🔁 يتم إرسال الرسالة {counter} مرة...")
+    for _ in range(counter):
         await event.client.send_message(event.chat_id, spam_message, reply_to=reply_message)
-    await hell.delete()
-    await event.client.send_message(lg_id, f"#SPAM \n\nSpammed  `{counter}`  messages!!")
+    await msg.delete()
+    await event.client.send_message(lg_id, f"#SPAM \n\nتم إرسال `{counter}` رسالة.")
 
 
-@zthon(pattern="bigspam(?:\s|$)([\s\S]*)")
+@zedub.zed_cmd(pattern="سبام_كبير(?:\s|$)([\s\S]*)")
 async def bigspam(event):
+    """سبام بعدد كبير بدون حد (قد يسبب حظر مؤقت)"""
     lg_id = Config.LOGGER_ID
-    msg_ = event.text[9:]
-    hellbot_count = int(msg_.split(" ")[0])
+    msg_ = event.text[11:]
+    try:
+        counter = int(msg_.split(" ")[0])
+        spam_message = msg_.replace(str(counter), "").strip()
+    except:
+        return await eor(event, f"الاستخدام: `{hl}سبام_كبير 500 قصف`")
+
     reply_msg = await event.get_reply_message()
-    if reply_msg:
-        hell_spam = reply_msg
-    else:
-        hell_spam = msg_.replace(str(hellbot_count), "")
-    for i in range(hellbot_count):
-        await event.client.send_message(event.chat_id, hell_spam, reply_to=reply_msg)
+    message_to_send = reply_msg if reply_msg else spam_message
+    for _ in range(counter):
+        await event.client.send_message(event.chat_id, message_to_send, reply_to=reply_msg)
     await event.delete()
-    await event.client.send_message(lg_id, f"#BIGSPAM \n\nBigspammed  `{hell_count}`  messages !!")
+    await event.client.send_message(lg_id, f"#BIGSPAM \n\nتم إرسال `{counter}` رسالة.")
 
 
-@zthon(pattern="dspam(?:\s|$)([\s\S]*)")
-async def spammer(event):
-    lg_id = Config.LOGGER_ID
-    input_str = "".join(event.text.split(maxsplit=1)[1:])
-    spamDelay = float(input_str.split(" ", 2)[0])
-    counter = int(input_str.split(" ", 2)[1])
-    spam_message = str(input_str.split(" ", 2)[2])
-    await event.delete()
-    for i in range(counter):
-        await event.client.send_message(event.chat_id, spam_message)
-        await asyncio.sleep(spamDelay)
-    await event.client.send_message(lg_id, f"#DELAYSPAM \n\nSpammed `{counter}`  messages with delay of `{spamDelay}` seconds!!")
-
-
-@zthon(pattern="uspam(?:\s|$)([\s\S]*)")
-async def _(event):
-    lg_id = Config.LOGGER_ID
-    reply_msg = await event.get_reply_message()
-    hell = event.text[7:]
-    if reply_msg:
-        input_str = reply_msg
-    else:
-        input_str = hell
-    await event.client.send_message(lg_id, f"#UNLIMITED_SPAM \n\nStarted Unlimited Spam. Will spam till floodwait. Do `{hl}restart` to stop.")
-    x = 0
-    while x < 69:
-        await event.client.send_message(event.chat_id, input_str)
-
-
-# Special Break Spam Module For HellBot Made By Chirag Bhargava.
-# Team WarBot
-@hell_cmd(pattern="bspam(?:\s|$)([\s\S]*)")
-async def spammer(event):
-    lg_id = Config.LOGGER_ID
-    msg_ = event.text[7:]
-    counter = int(msg_.split(" ")[0])
-    reply_msg = await event.get_reply_message()
-    if reply_msg:
-        spam_message = reply_msg
-    else:
-        spam_message = msg_.replace(str(counter), "")
-    rd = int(counter % 100)
-    tot = int((counter - rd )/100)
-    a = 30
-    for q in range(tot):
-        for p in range(100):
-            await event.client.send_message(event.chat_id, spam_message)
-        a = a + 2
-        await asyncio.sleep(a)
-    await event.delete()
-    await event.client.send_message(lg_id, f"#BREAK_SPAM \n\nSpammed  {counter}  messages!!")
-
-
-@hell_cmd(pattern="mspam(?:\s|$)([\s\S]*)")
-async def tiny_pic_spam(event):
+@zedub.zed_cmd(pattern="سبام_مؤقت(?:\s|$)([\s\S]*)")
+async def delay_spam(event):
+    """سبام برسائل مؤقتة بفاصل زمني"""
     lg_id = Config.LOGGER_ID
     try:
-        counter = int(event.pattern_match.group(1).split(" ", 1)[0])
-        reply_message = await event.get_reply_message()
-        if (
-            not reply_message
-            or not event.reply_to_msg_id
-            or not reply_message.media
-            or not reply_message.media
-        ):
-            return await event.edit("```Reply to a pic/sticker/gif/video message```")
-        message = reply_message.media
-        for i in range(counter):
-            await event.client.send_file(event.chat_id, message)
+        input_str = "".join(event.text.split(maxsplit=1)[1:])
+        delay = float(input_str.split(" ", 2)[0])
+        counter = int(input_str.split(" ", 2)[1])
+        spam_message = str(input_str.split(" ", 2)[2])
     except:
-        return await event.reply(f"**Error**\nUsage `{hl}mspam <count> reply to a sticker/gif/photo/video`")
+        return await eor(event, f"الاستخدام: `{hl}سبام_مؤقت 2 10 مرحباً`")
     await event.delete()
+    for _ in range(counter):
+        await event.client.send_message(event.chat_id, spam_message)
+        await asyncio.sleep(delay)
+    await event.client.send_message(lg_id, f"#DELAYSPAM \n\nتم إرسال `{counter}` رسالة بفاصل `{delay}` ثانية.")
 
 
-CmdHelp("اسبام").add_command(
-  "spam", "<number> <text>", "Sends the text 'X' number of times.", "spam 99 Hello"
-).add_command(
-  "mspam", "<reply to media> <number>", "Sends the replied media (gif/ video/ sticker/ pic) 'X' number of times", "mspam 100 <reply to media>"
-).add_command(
-  "dspam", "<delay> <spam count> <text>", "Sends the text 'X' number of times in 'Y' seconds of delay", "dspam 5 100 Hello"
-).add_command(
-  "uspam", "<reply to a msg> or <text>", "Spams the message unlimited times until you get floodwait error.", "uspam Hello"
-).add_command(
-  "bspam", "<count> <text or reply>", "Spams the message X times without floodwait. Breaks the spam count to avoid floodwait.", "bspam 9999 Hello"
-).add_command(
-  "bigspam", "<count> <text>", "Sends the text 'X' number of times. This what hellbot iz known for. The Best BigSpam Ever", "bigspam 9999 Hello"
-).add_info(
-  "Spammers Commands"
-).add_warning(
-  "❌ May Get Floodwait Error Or Limit Your Account"
-).add()
+@zedub.zed_cmd(pattern="سبام_لا_نهائي(?:\s|$)([\s\S]*)")
+async def uspam(event):
+    """إرسال رسالة بشكل غير نهائي حتى حدوث FloodWait"""
+    lg_id = Config.LOGGER_ID
+    reply_msg = await event.get_reply_message()
+    msg_text = event.text[13:].strip()
+    input_msg = reply_msg or msg_text
+
+    if not input_msg:
+        return await eor(event, f"الاستخدام: `{hl}سبام_لا_نهائي مرحباً` أو بالرد على رسالة")
+
+    await event.client.send_message(
+        lg_id,
+        f"#UNLIMITED_SPAM\n\nبدأ الإسبام غير النهائي. سيتم التوقف تلقائيًا عند حدوث FloodWait."
+    )
+
+    while True:
+        try:
+            await event.client.send_message(event.chat_id, input_msg)
+        except FloodWaitError as e:
+            break
+
+
+@zedub.zed_cmd(pattern="سبام_مجزأ(?:\s|$)([\s\S]*)")
+async def bspam(event):
+    """إرسال سبام مجزأ لتجنب الحظر (دفعات مع تأخير)"""
+    lg_id = Config.LOGGER_ID
+    msg_ = event.text[12:]
+    try:
+        counter = int(msg_.split(" ")[0])
+    except:
+        return await eor(event, f"الاستخدام: `{hl}سبام_مجزأ 500 مرحباً`")
+    
+    reply_msg = await event.get_reply_message()
+    spam_message = reply_msg or msg_.replace(str(counter), "").strip()
+    rest = counter % 100
+    sets = counter // 100
+    delay = 30
+
+    for _ in range(sets):
+        for __ in range(100):
+            await event.client.send_message(event.chat_id, spam_message)
+        delay += 2
+        await asyncio.sleep(delay)
+
+    for _ in range(rest):
+        await event.client.send_message(event.chat_id, spam_message)
+
+    await event.delete()
+    await event.client.send_message(lg_id, f"#BREAK_SPAM\n\nتم إرسال `{counter}` رسالة مجزأة.")
+
+
+@zedub.zed_cmd(pattern="سبام_ميديا(?:\s|$)([\s\S]*)")
+async def mspam(event):
+    """إرسال وسائط (صور/ملصقات/فيديوهات) مكررة"""
+    lg_id = Config.LOGGER_ID
+    reply_msg = await event.get_reply_message()
+    try:
+        count = int(event.pattern_match.group(1).split(" ")[0])
+    except:
+        return await eor(event, f"الاستخدام: `{hl}سبام_ميديا 50` مع الرد على ميديا")
+
+    if not reply_msg or not reply_msg.media:
+        return await eor(event, "↪️ رد على صورة، ملصق، فيديو، أو GIF لاستخدام هذا الأمر.")
+    
+    media = reply_msg.media
+    for _ in range(count):
+        await event.client.send_file(event.chat_id, media)
+    await event.delete()
+    await event.client.send_message(lg_id, f"#MEDIA_SPAM\n\nتم إرسال الوسائط `{count}` مرة.")
