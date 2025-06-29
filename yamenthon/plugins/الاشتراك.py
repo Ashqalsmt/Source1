@@ -207,10 +207,11 @@ async def supc(event):  # Zed-Thon - ZelZal
             if "not found" in reqt:
                 try:
                     c = await zedub.get_entity(ch)
-                    chn = c.username
-                    if c.username == None:
-                        ra = await zedub.tgbot(ExportChatInviteRequest(ch))
-                        chn = ra.link
+                    if getattr(c, 'username', None):
+    chn = f"https://t.me/{c.username}"
+else:
+    ra = await zedub.tgbot(ExportChatInviteRequest(ch))
+    chn = ra.link
                     if chn.startswith("https://"):
                         await zedub.tgbot.send_message(
     event.chat_id,
@@ -230,10 +231,11 @@ async def supc(event):  # Zed-Thon - ZelZal
             if "left" in reqt:
                 try:
                     c = await zedub.get_entity(ch)
-                    chn = c.username
-                    if c.username == None:
-                        ra = await zedub.tgbot(ExportChatInviteRequest(ch))
-                        chn = ra.link
+                    if getattr(c, 'username', None):
+    chn = f"https://t.me/{c.username}"
+else:
+    ra = await zedub.tgbot(ExportChatInviteRequest(ch))
+    chn = ra.link
                     if chn.startswith("https://"):
                         await zedub.tgbot.send_message(
     event.chat_id,
