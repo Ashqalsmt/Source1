@@ -9,9 +9,10 @@ import requests
 from telethon import Button, events, version
 from telethon.events import CallbackQuery
 
-from . import StartTime, zedub, repversion, mention
+#from . import StartTime, zedub, repversion, mention
 
 from ..Config import Config
+from . import mention
 from ..core.managers import edit_or_reply
 from ..core import check_owner, pool
 from ..helpers.functions import repalive, check_data_base_heal_th, get_readable_time
