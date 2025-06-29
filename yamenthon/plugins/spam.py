@@ -175,7 +175,7 @@ async def mspam(event):
     """إرسال وسائط (صور/ملصقات/فيديوهات) مكررة"""
     lg_id = Config.LOGGER_ID
     reply_msg = await event.get_reply_message()
-    arg = event.pattern_match.group(1).strip() if event.pattern_match.group(1) else ""
+    arg = (event.pattern_match.group(1) or "").strip()
 
     if not arg or not arg.isdigit():
         await eor(event, f"❗ **يجب تحديد عدد التكرارات.**\nمثال: `{hl}سبام_ميديا 10` مع الرد على ميديا")
