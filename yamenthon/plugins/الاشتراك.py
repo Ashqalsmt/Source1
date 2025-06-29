@@ -212,11 +212,11 @@ async def supc(event):  # Zed-Thon - ZelZal
                         ra = await zedub.tgbot(ExportChatInviteRequest(ch))
                         chn = ra.link
                     if chn.startswith("https://"):
-                        await event.reply(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
+                        await zedub.tgbot.send_message(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
                         )
                         return await event.delete()
                     else:
-                        await event.reply(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
+                        await zedub.tgbot.send_message(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
                         )
                         return await event.delete()
                 except BaseException as er:
@@ -229,11 +229,11 @@ async def supc(event):  # Zed-Thon - ZelZal
                         ra = await zedub.tgbot(ExportChatInviteRequest(ch))
                         chn = ra.link
                     if chn.startswith("https://"):
-                        await event.reply(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
+                        await zedub.tgbot.send_message(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
                         )
                         return await event.message.delete()
                     else:
-                        await event.reply(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
+                        await zedub.tgbot.send_message(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
                         )
                         return await event.message.delete()
                 except BaseException as er:
