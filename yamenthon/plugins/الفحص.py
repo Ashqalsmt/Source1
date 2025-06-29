@@ -71,13 +71,15 @@ async def amireallyalive(event):
 
 
 zed_temp = """{ALIVE_TEXT}
-
+┏───────────────┓
+│ ◉ ʙᴏᴛ ʏᴀᴍᴇɴᴛʜᴏɴ ɪs ʀᴜɴɴɪɴɢ ɴᴏᴡ
+┣───────────────┫
 **{Z_EMOJI} قاعدۿ البيانات :** تعمل بنـجاح
 **{Z_EMOJI} إصـدار التـيليثون :** `{telever}`
-**{Z_EMOJI} إصـدار يـــمنثون :** `{tepver}`
-**{Z_EMOJI} إصـدار البـايثون :** `{pyver}`
-**{Z_EMOJI} الوقـت :** `{uptime}`
-**{Z_EMOJI} المسـتخدم:** {mention}
+**{Z_EMOJI} ● ʏᴀᴍᴇɴᴛʜᴏɴ ➪** `{tepver}`
+**{Z_EMOJI} ● ᴘʏᴛʜᴏɴ ➪** `{pyver}`
+**{Z_EMOJI} ● ᴜᴘ ᴛɪᴍᴇ ➪** `{uptime}`
+**{Z_EMOJI} ● ɴᴀᴍᴇ ➪:** {mention}
 **{Z_EMOJI} قنـاة السـورس :** [اضغـط هنـا](https://t.me/YamenThon)"""
 
 
