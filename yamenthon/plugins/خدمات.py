@@ -19,7 +19,7 @@ from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
 
-
+plugin_category = "الخدمات"
 
 @zedub.zed_cmd(pattern="اغنيه(?: |$)(.*)")
 async def _(event):
