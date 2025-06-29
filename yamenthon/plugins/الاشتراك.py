@@ -173,7 +173,7 @@ async def supc (event):
 
 
 @zedub.zed_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=None)
-async def supc(event):  # الاسطوره عاشق الصمت 
+async def supc(event):  # Zed-Thon - ZelZal
     chat = await event.get_chat()
     zed_dev = (5571722913, 6937025378)
     zelzal = (await event.get_sender()).id
@@ -184,25 +184,15 @@ async def supc(event):  # الاسطوره عاشق الصمت
     if gvarstatus ("sub_private"):
         try:
    
-            idd = event.sender_id
-tok = Config.TG_BOT_TOKEN
-ch = gvarstatus("Custom_Pm_Channel")
-
-# تأكد أن المعرف يحتوي على -100
-if not str(ch).startswith("-100"):
-    ch = f"-100{str(ch).replace('-100', '').strip()}"
-
-url = f"https://api.telegram.org/bot{tok}/getChatMember"
-params = {
-    "chat_id": ch,
-    "user_id": idd
-}
-
-try:
-    req = requests.get(url, params=params)
-    reqt = req.json()
-except Exception as e:
-    return await zedub.tgbot.send_message(BOTLOG_CHATID, f"**- خطأ في الاتصال بـ API:\n{e}**")
+            idd = event.peer_id.user_id
+            tok = Config.TG_BOT_TOKEN
+            ch = gvarstatus ("Custom_Pm_Channel")
+            try:
+                ch = int(ch)
+            except BaseException as r:
+                return await zedub.tgbot.send_message(BOTLOG_CHATID, f"**- خطـأ \n{r}**")
+            url = f"https://api.telegram.org/bot{tok}/getchatmember?chat_id={ch}&user_id={idd}"
+            req = requests.get(url)
             reqt = req.text
             if "chat not found" in reqt:
                 mb = await zedub.tgbot.get_me()
