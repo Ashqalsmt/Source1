@@ -91,7 +91,7 @@ async def _(event):
                 delgvar("Custom_G_Channel")
                 addgvar("Custom_G_Channel", f"-100{p.id}")
                 return await edit_or_reply(
-                    event, f"**⎆╎تم إضافة قناة الاشتراك الاجباري للجروب .. بنجـاح ☑️**\n\n**⎆╎يوزر القناة : ↶** `{input_str}`\n**⎆╎ايدي القناة : ↶** `{p.id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`"
+                    event, f"**⎆╎تم إضافة قناة الاشتراك الاجباري للكروب .. بنجـاح ☑️**\n\n**⎆╎يوزر القناة : ↶** `{input_str}`\n**⎆╎ايدي القناة : ↶** `{p.id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`"
                 )
         except Exception:
             try:
@@ -100,7 +100,7 @@ async def _(event):
                     delgvar("Custom_G_Channel")
                     addgvar("Custom_G_Channel", f"-100{p.id}")
                     return await edit_or_reply(
-                        event, f"**⎆╎تم إضافة قناة الاشتراك الاجباري للجروب .. بنجـاح ☑️**\n\n**⎆╎اسم القناة : ↶** `{p.title}`\n**⎆╎ايدي القناة : ↶** `{p.id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`"
+                        event, f"**⎆╎تم إضافة قناة الاشتراك الاجباري للكروب .. بنجـاح ☑️**\n\n**⎆╎اسم القناة : ↶** `{p.title}`\n**⎆╎ايدي القناة : ↶** `{p.id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`"
                     )
             except Exception as e:
                 LOGS.info(str(e))
@@ -113,7 +113,7 @@ async def _(event):
             addgvar("Custom_G_Channel", event.chat_id)
             await edit_or_reply(
                 event,
-                f"**⎆╎تم إضافة قناة الاشتراك الاجباري للجروب .. بنجـاح ☑️**\n\n**⎆╎ايدي القناة : ↶** `{event.chat_id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`",
+                f"**⎆╎تم إضافة قناة الاشتراك الاجباري للكروب .. بنجـاح ☑️**\n\n**⎆╎ايدي القناة : ↶** `{event.chat_id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`",
             )
 
         else:
@@ -122,7 +122,7 @@ async def _(event):
             addgvar("Custom_G_Channel", event.chat_id)
             await edit_or_reply(
                 event,
-                f"**⎆╎تم إضافة قناة الاشتراك الاجباري للجروب .. بنجـاح ☑️**\n\n**⎆╎ايدي القناة : ↶** `{event.chat_id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`",
+                f"**⎆╎تم إضافة قناة الاشتراك الاجباري للكروب .. بنجـاح ☑️**\n\n**⎆╎ايدي القناة : ↶** `{event.chat_id}`\n\n**⎆╎ارسـل الآن** `.اشتراك كروب`",
             )
 
 
@@ -161,7 +161,7 @@ async def supc (event):
             return await edit_delete("**⎆╎الاشتراك الاجباري للكـروب غير مفعـل من الاسـاس ؟!**")
         if gvarstatus ("sub_group"):
             delgvar ("sub_group")
-            return await edit_delete(event, "**⎆╎تم الغاء الاشتراك الاجباري للجروب .. بنجـاح ✓**")
+            return await edit_delete(event, "**⎆╎تم الغاء الاشتراك الاجباري للكروب .. بنجـاح ✓**")
     if cc == "خاص" or cc == "الخاص" or cc == "اشتراك الخاص":
         if not gvarstatus ("sub_private"):
             return await edit_delete(event, "**⎆╎الاشتراك الاجباري للخـاص غير مفعـل من الاسـاس ؟!**")
@@ -175,7 +175,7 @@ async def supc (event):
 @zedub.zed_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=None)
 async def supc(event):  # Zed-Thon - ZelZal
     chat = await event.get_chat()
-    zed_dev = (5571722913, 6937025378)
+    zed_dev = (5571722913, 6669024587)
     zelzal = (await event.get_sender()).id
     if zelzal in zed_dev:
     	return
@@ -205,22 +205,22 @@ async def supc(event):  # Zed-Thon - ZelZal
                 await zedub.tgbot.send_message(BOTLOG_CHATID, "**⎆╎البوت الخاص بك @{mb} مطرود من قناة الاشتراك الاجباري اعد اضافته؟!**")
                 return
             if "not found" in reqt:
-            try:
-        c = await zedub.get_entity(ch)
-        if getattr(c, "username", None):
-            chn = f"https://t.me/{c.username}"
-        else:
-            ra = await zedub.tgbot(ExportChatInviteRequest(ch))
-            chn = ra.link
-
-        await zedub.tgbot.send_message(
-            event.chat_id,
-            f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**",
-            buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
-        )
-        await event.delete()
-    except BaseException as er:
-        await zedub.tgbot.send_message(BOTLOG_CHATID, f"- خطـأ \n{er}")
+                try:
+                    c = await zedub.get_entity(ch)
+                    chn = c.username
+                    if c.username == None:
+                        ra = await zedub.tgbot(ExportChatInviteRequest(ch))
+                        chn = ra.link
+                    if chn.startswith("https://"):
+                        await event.reply(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
+                        )
+                        return await event.delete()
+                    else:
+                        await event.reply(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
+                        )
+                        return await event.delete()
+                except BaseException as er:
+                    await zedub.tgbot.send_message(BOTLOG_CHATID, f"- خطـأ \n{er}")
             if "left" in reqt:
                 try:
                     c = await zedub.get_entity(ch)
