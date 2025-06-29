@@ -36,7 +36,7 @@ async def amireallyalive(event):
     ms = (end - start).microseconds / 1000
     _, check_sgnirts = check_data_base_heal_th()
     Z_EMOJI = gvarstatus("ALIVE_EMOJI") or "❈┊"
-    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "** سورس  يـــمنثون 𝙔𝘼𝙈  يعمـل .. بنجـاح ☑️ 𓆩 **"
+    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "〆ᴅᴇᴠᴇʟᴏᴘᴇʀ ᴀsʜᴇǫ ᴀʟsᴀᴍᴛ〆"
     ZED_IMG = gvarstatus("ALIVE_PIC")
     zed_caption = gvarstatus("ALIVE_TEMPLATE") or zed_temp
     caption = zed_caption.format(
