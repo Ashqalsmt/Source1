@@ -1,4 +1,3 @@
-
 import json
 import math
 import os
@@ -21,15 +20,14 @@ from telethon.errors import QueryIdInvalidError
 from telethon.events import CallbackQuery, InlineQuery
 from telethon.utils import get_display_name
 from telethon.tl.types import InputMessagesFilterDocument
-#from . import StartTime, zedub, repversion
+from zthon import StartTime, zedub, zedversion
 from ..Config import Config
-from . import mention
 from ..helpers.functions import rand_key
 from ..core import check_owner, pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from ..helpers.utils import reply_id, _format
+from ..helpers.utils import reply_id, get_user_from_event, _format
 from ..helpers.tools import media_type
 from . import media_type, progress
 from ..utils import load_module, remove_plugin
