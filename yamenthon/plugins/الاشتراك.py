@@ -205,7 +205,7 @@ async def supc(event):  # Zed-Thon - ZelZal
                 await zedub.tgbot.send_message(BOTLOG_CHATID, "**⎆╎البوت الخاص بك @{mb} مطرود من قناة الاشتراك الاجباري اعد اضافته؟!**")
                 return
             if "not found" in reqt:
-    try:
+            try:
         c = await zedub.get_entity(ch)
         if getattr(c, "username", None):
             chn = f"https://t.me/{c.username}"
