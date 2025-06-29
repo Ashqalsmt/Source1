@@ -207,48 +207,38 @@ async def supc(event):  # Zed-Thon - ZelZal
             if "not found" in reqt:
                 try:
                     c = await zedub.get_entity(ch)
-                    if getattr(c, 'username', None):
-    chn = f"https://t.me/{c.username}"
-else:
-    ra = await zedub.tgbot(ExportChatInviteRequest(ch))
-    chn = ra.link
+                    chn = c.username
+                    if c.username == None:
+                        ra = await zedub.tgbot(ExportChatInviteRequest(ch))
+                        chn = ra.link
                     if chn.startswith("https://"):
                         await zedub.tgbot.send_message(
     event.chat_id,
     f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**",
     buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
 )
+                        )
                         return await event.delete()
                     else:
-                        await zedub.tgbot.send_message(
-    event.chat_id,
-    f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**",
-    buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
-)
+                        await event.reply(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
+                        )
                         return await event.delete()
                 except BaseException as er:
                     await zedub.tgbot.send_message(BOTLOG_CHATID, f"- خطـأ \n{er}")
             if "left" in reqt:
                 try:
                     c = await zedub.get_entity(ch)
-                    if getattr(c, 'username', None):
-    chn = f"https://t.me/{c.username}"
-else:
-    ra = await zedub.tgbot(ExportChatInviteRequest(ch))
-    chn = ra.link
+                    chn = c.username
+                    if c.username == None:
+                        ra = await zedub.tgbot(ExportChatInviteRequest(ch))
+                        chn = ra.link
                     if chn.startswith("https://"):
-                        await zedub.tgbot.send_message(
-    event.chat_id,
-    f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**",
-    buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
-)
+                        await event.reply(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
+                        )
                         return await event.message.delete()
                     else:
-                        await zedub.tgbot.send_message(
-    event.chat_id,
-    f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**",
-    buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
-)
+                        await event.reply(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
+                        )
                         return await event.message.delete()
                 except BaseException as er:
                     await zedub.tgbot.send_message(BOTLOG_CHATID, f"- خطـأ \n{er}")
