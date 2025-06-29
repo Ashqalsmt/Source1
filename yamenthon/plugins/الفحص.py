@@ -80,7 +80,8 @@ zed_temp = """{ALIVE_TEXT}
 **{Z_EMOJI} ● ᴘʏᴛʜᴏɴ ➪** `{pyver}`
 **{Z_EMOJI} ● ᴜᴘ ᴛɪᴍᴇ ➪** `{uptime}`
 **{Z_EMOJI} ● ɴᴀᴍᴇ ➪:** {mention}
-**{Z_EMOJI} ● ᴍʏ ᴄʜᴀɴɴᴇʟ ➪ [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://t.me/YamenThon)"""
+**{Z_EMOJI} ● ᴍʏ ᴄʜᴀɴɴᴇʟ ➪ **[ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://t.me/YamenThon)
+┗───────────────┛"""
 
 
 @zedub.zed_cmd(
