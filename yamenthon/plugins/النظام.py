@@ -25,7 +25,7 @@ from ..sql_helper.global_collection import (
 )
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from ..helpers.functions import repalive, check_data_base_heal_th, get_readable_time
+from ..helpers.functions import zedalive, check_data_base_heal_th, get_readable_time
 from ..helpers.utils import _reputils, reply_id, parse_pre, checking, yaml_format, install_pip, get_user_from_event, _format
 from . import zedub, BOTLOG, BOTLOG_CHATID, HEROKU_APP, mention, StartTime, repversion
 
