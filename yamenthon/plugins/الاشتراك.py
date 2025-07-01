@@ -171,76 +171,69 @@ async def supc (event):
     if cc not in ["خاص", "كروب", "جروب", "قروب", "مجموعة", "مجموعه", "الخاص", "اشتراك الخاص", "الكروب", "اشتراك الكروب"]:
         return await edit_delete(event, "**⎆╎اختـر نوع الاشتـراك الاجبـاري اولاً لـ الالغـاء :**\n\n`.تعطيل كروب`\n\n`.تعطيل خاص`")
 
-
 @zedub.zed_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=None)
-async def supc(event):  # Zed-Thon - ZelZal
+async def supc(event):  # الاشتراك الإجباري في الخاص
     chat = await event.get_chat()
-    zed_dev = (5571722913, 6669024587)
+    zed_dev = (5571722913, 6937025378)
     zelzal = (await event.get_sender()).id
+
     if zelzal in zed_dev:
-    	return
+        return
     if chat.bot:
-    	return
-    if gvarstatus ("sub_private"):
+        return
+    if gvarstatus("sub_private"):
         try:
-   
-            idd = event.peer_id.user_id
+            idd = event.sender_id
             tok = Config.TG_BOT_TOKEN
-            ch = gvarstatus ("Custom_Pm_Channel")
+            ch = gvarstatus("Custom_Pm_Channel")
+
             try:
                 ch = int(ch)
             except BaseException as r:
                 return await zedub.tgbot.send_message(BOTLOG_CHATID, f"**- خطـأ \n{r}**")
+
+            # تحقق من حالة العضوية
             url = f"https://api.telegram.org/bot{tok}/getchatmember?chat_id={ch}&user_id={idd}"
             req = requests.get(url)
             reqt = req.text
+
             if "chat not found" in reqt:
                 mb = await zedub.tgbot.get_me()
-                mb = mb.username
-                await zedub.tgbot.send_message(BOTLOG_CHATID, f"**⎆╎البوت الخاص بك @{mb} ليس في قناة الاشتراك الاجباري ؟!**")
+                await zedub.tgbot.send_message(BOTLOG_CHATID, f"**⎆╎البوت الخاص بك @{mb.username} ليس في قناة الاشتراك الاجباري ؟!**")
                 return
+
             if "bot was kicked" in reqt:
                 mb = await zedub.tgbot.get_me()
-                mb = mb.username
-                await zedub.tgbot.send_message(BOTLOG_CHATID, "**⎆╎البوت الخاص بك @{mb} مطرود من قناة الاشتراك الاجباري اعد اضافته؟!**")
+                await zedub.tgbot.send_message(BOTLOG_CHATID, f"**⎆╎البوت @{mb.username} مطرود من القناة، أعد إضافته.**")
                 return
-            if "not found" in reqt:
+
+            if "not found" in reqt or "left" in reqt:
                 try:
                     c = await zedub.get_entity(ch)
-                    chn = c.username
-                    if c.username == None:
-                        ra = await zedub.tgbot(ExportChatInviteRequest(ch))
-                        chn = ra.link
-                    if chn.startswith("https://"):
-                        await event.reply(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
-                        )
-                        return await event.delete()
+
+                    # جلب رابط القناة
+                    if c.username:
+                        chn_link = f"https://t.me/{c.username}"
                     else:
-                        await event.reply(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
-                        )
-                        return await event.delete()
-                except BaseException as er:
-                    await zedub.tgbot.send_message(BOTLOG_CHATID, f"- خطـأ \n{er}")
-            if "left" in reqt:
-                try:
-                    c = await zedub.get_entity(ch)
-                    chn = c.username
-                    if c.username == None:
                         ra = await zedub.tgbot(ExportChatInviteRequest(ch))
-                        chn = ra.link
-                    if chn.startswith("https://"):
-                        await event.reply(f"**⎆╎يجب عليك الإشـتࢪاڪ بالقناة أولًا\n⎆╎قناة الاشتراك : {chn}**", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", chn)]]
-                        )
-                        return await event.message.delete()
-                    else:
-                        await event.reply(f"**⎆╎اشترك في قـنـاة الاشـتراك للتحدث معي رجـاءً لا يمكنك التـحـدث إلا بـعد الاشـتراك ♡\n⎆╎قناة الاشتراك : @{chn} **", buttons=[[Button.url("اضغط لـ الإشـتࢪاڪ 🤍", f"https://t.me/{chn}")]]
-                        )
-                        return await event.message.delete()
+                        chn_link = ra.link
+
+                    # إرسال الرسالة من البوت المساعد
+                    await zedub.tgbot.send_message(
+                        event.sender_id,
+                        "**⎆╎للتحدث معي، يرجى أولاً الاشتراك في القناة التالية 👇**",
+                        buttons=[[Button.url("اضغط للاشتراك 🤍", chn_link)]]
+                    )
+                    return await event.delete()
+
                 except BaseException as er:
-                    await zedub.tgbot.send_message(BOTLOG_CHATID, f"- خطـأ \n{er}")
+                    await zedub.tgbot.send_message(BOTLOG_CHATID, f"- خطـأ أثناء التحقق من القناة:\n{er}")
+
             if "error_code" in reqt:
-                await zedub.tgbot.send_message(BOTLOG_CHATID, f"**- خطـأ غير معروف قم باعادة توجيه الرسالة ل@T_A_Tl لحل المشكلة\n{reqt}**")
-            
-            return
+                await zedub.tgbot.send_message(
+                    BOTLOG_CHATID,
+                    f"**⎆╎خطـأ غير معروف من Telegram API\n\n{reqt}**"
+                )
+
         except BaseException as er:
-            await zedub.tgbot.send_message(BOTLOG_CHATID, f"** - خطـأ\n{er}**")
+            await zedub.tgbot.send_message(BOTLOG_CHATID, f"**⎆╎استثناء داخلي:\n{er}**")
