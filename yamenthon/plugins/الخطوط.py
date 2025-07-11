@@ -30,6 +30,27 @@ async def btext(event):
         delgvar("ramz")
         await edit_delete(event, "**⪼ تـم إطفـاء خط الرمز بنجاح الآن **")
         return
+@zedub.on(admin_cmd(pattern="ايقاف الخطوط"))
+async def stop_all_fonts(event):
+    removed = []
+
+    if gvarstatus("bold"):
+        delgvar("bold")
+        removed.append("الغامق")
+    if gvarstatus("ramz"):
+        delgvar("ramz")
+        removed.append("الرمز")
+    if gvarstatus("tshwesh"):
+        delgvar("tshwesh")
+        removed.append("المشطوب")
+    if gvarstatus("italic"):
+        delgvar("italic")
+        removed.append("المائل")
+
+    if removed:
+        await edit_delete(event, f"❖╎ تم إيقاف الخطوط التالية: {'، '.join(removed)} ✓")
+    else:
+        await edit_delete(event, "❖╎ لا توجد أي خطوط مفعلة لإيقافها ✓")
 
 @zedub.on(events.NewMessage(outgoing=True))
 async def reda(event):
