@@ -2,6 +2,7 @@ import asyncio
 from yamenthon import zedub
 from telethon import events, TelegramClient
 from telethon.tl.custom import Button
+from telethon.sessions import StringSession
 from ..Config import Config
 
 plugin_category = "البوتات"
