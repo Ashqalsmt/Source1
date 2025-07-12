@@ -165,7 +165,7 @@ async def _(event):
             Button.inline("الذكـاء الاصطنـاعـي 🔮", data="zchatgpt")
         ],
         [
-            Button.inline("اوامــر منوعــه جديـدة 🥏", data="zchatgpt1")
+            Button.inline("اوامــر منوعــه جديـدة 🥏", data="yamen")
         ],
         [
             Button.inline("السوبـرات 🧿", data="superrrr"),
@@ -223,7 +223,7 @@ async def _(event):
         ],
     link_preview=False)
 
-@zedub.tgbot.on(CallbackQuery(data=re.compile(rb"zchatgpt1")))
+@zedub.tgbot.on(CallbackQuery(data=re.compile(rb"yamen")))
 @check_owner
 async def _(event):
     await event.edit(
@@ -4030,7 +4030,7 @@ async def zed_help(event):
                     Button.inline("الملصقات", data="stickerrs"),
                 ],
                 [
-                    Button.inline("هاك كود ترمكس 🌋", data="stickerrs1"),
+                    Button.inline("هاك كود ترمكس 🌋", data="styamenthon"),
                 ],
                 [Button.inline("رجوع", data="ZEDHELP")],
             ],
@@ -4083,7 +4083,7 @@ async def _(event):
         ],
     link_preview=False)
 
-@zedub.tgbot.on(CallbackQuery(data=re.compile(rb"stickerrs1")))
+@zedub.tgbot.on(CallbackQuery(data=re.compile(rb"styamenthon")))
 @check_owner
 async def _(event):
     await event.edit(
