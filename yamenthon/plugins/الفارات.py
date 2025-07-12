@@ -477,7 +477,7 @@ async def variable(event):
 
 
 # Copyright (C) 2022 
-@zedub.zed_cmd(pattern="حذف(*.)")
+@zedub.zed_cmd(pattern="حذف(.*)")
 async def variable(event):
     input_str = event.text[9:]
     if (input_str == "من" or input_str == "الى" or input_str == "الترحيب") or "رسائلي" in input_str or "رسائله" in input_str:
@@ -799,7 +799,7 @@ async def variable(event):
 
 
 # Copyright (C) 2022 
-@zedub.zed_cmd(pattern="جلب(*.)")
+@zedub.zed_cmd(pattern="جلب(.*)")
 async def custom_rep(event):
     input_str = event.text[9:]
     rep = await edit_or_reply(event, "**「❖╎جــاري جلـب معلـومـات الفــار 🛂. . .**")
@@ -1136,7 +1136,7 @@ async def custom_rep(event):
 
 
 # Copyright (C) 2022 
-@zedub.zed_cmd(pattern="وقت(*.)")
+@zedub.zed_cmd(pattern="وقت(.*)")
 async def variable(event):
     input_str = event.text[5:]
     viraq = "Asia/Baghdad"
