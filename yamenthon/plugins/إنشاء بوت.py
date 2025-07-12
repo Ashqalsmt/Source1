@@ -16,7 +16,9 @@ async def interact_with_botfather(client, command, wait_for=None, timeout=30):
             
         # انتظار الرد من BotFather
         response = await client.wait_for(
-            events.NewMessage(from_users='BotFather', timeout=timeout)
+            events.NewMessage(from_users='BotFather'),
+            timeout=timeout
+        )
         
         return response.text
         
@@ -30,17 +32,25 @@ async def create_bot(event):
     try:
         input_str = event.pattern_match.group(1)
         if ' ' not in input_str:
-            await event.respond("⎉╎يجب كتابة اسم البوت ويوزره مع المسافة بينهم!\nمثال: `.صنع بوت MyBot mybot`")
+            await event.respond(
+                "⎉╎يجب كتابة اسم البوت ويوزره مع المسافة بينهم!\n"
+                "مثال: `.صنع بوت MyBot mybot`",
+                parse_mode='markdown'
+            )
             return
             
         name, username = input_str.split(' ', 1)
         if not username.startswith('@'):
             username = f"@{username}"
         
-        async with TelegramClient('bot_session', Config.APP_ID, Config.API_HASH) as client:
+        async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
             # التأكد من تسجيل الدخول
             if not await client.is_user_authorized():
-                await event.respond("⎉╎❌ يجب تسجيل الدخول أولاً! استخدم الأمر .تسجيل لإنشاء جلسة")
+                await event.respond(
+                    "⎉╎❌ يجب تسجيل الدخول أولاً!\n"
+                    "استخدم الأمر `.تسجيل` لإنشاء جلسة",
+                    parse_mode='markdown'
+                )
                 return
             
             # إنشاء البوت
@@ -66,7 +76,10 @@ async def create_bot(event):
                 )
                 
                 if not token_msg:
-                    await event.respond(f"⎉╎✅ تم إنشاء البوت: {username} ولكن لم يتم الحصول على التوكن")
+                    await event.respond(
+                        f"⎉╎✅ تم إنشاء البوت: {username}\n"
+                        "ولكن لم يتم الحصول على التوكن"
+                    )
                     return
                     
                 if "Use this token" in token_msg or "استخدم هذا الرمز" in token_msg:
@@ -75,18 +88,27 @@ async def create_bot(event):
                         f"⎉╎✅ تم إنشاء البوت بنجاح!\n\n"
                         f"⎉╎اليوزر: {username}\n"
                         f"⎉╎التوكن: `{token}`\n\n"
-                        f"⎉╎يمكنك التحكم فيه باستخدام الأمر:\n`.تحكم {username}`",
-                        parse_mode='md'
+                        f"⎉╎يمكنك التحكم فيه باستخدام الأمر:\n`.تعديل {username}`",
+                        parse_mode='markdown'
                     )
                 else:
-                    await event.respond(f"⎉╎✅ تم إنشاء البوت: {username} ولكن لم يتم الحصول على التوكن.\nالرد: {token_msg}")
+                    await event.respond(
+                        f"⎉╎✅ تم إنشاء البوت: {username}\n"
+                        f"ولكن لم يتم الحصول على التوكن.\nالرد: {token_msg}"
+                    )
             else:
-                await event.respond(f"⎉╎❌ فشل في إنشاء البوت. قد يكون اليوزر محجوزاً.\n\nالرد من بوت فاذر:\n{result}")
+                await event.respond(
+                    f"⎉╎❌ فشل في إنشاء البوت. قد يكون اليوزر محجوزاً.\n\n"
+                    f"الرد من بوت فاذر:\n{result}"
+                )
                 
     except Exception as e:
-        await event.respond(f"⎉╎❌ حدث خطأ غير متوقع:\n{type(e).__name__}: {str(e)}")
+        await event.respond(
+            f"⎉╎❌ حدث خطأ غير متوقع:\n"
+            f"{type(e).__name__}: {str(e)}"
+        )
 
-@zedub.on(events.NewMessage(pattern=r'\.تحكم (@?\w+)'))
+@zedub.on(events.NewMessage(pattern=r'\.تعديل (@?\w+)'))
 async def manage_bot(event):
     try:
         username = event.pattern_match.group(1)
@@ -119,7 +141,7 @@ async def change_name_handler(event):
             original_msg = await event.get_message()
             username = original_msg.text.split()[-1]
             
-            async with TelegramClient('bot_session', Config.APP_ID, Config.API_HASH) as client:
+            async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
                 result = await interact_with_botfather(
                     client,
                     f"/setname {username}\n{new_name}",
@@ -127,9 +149,14 @@ async def change_name_handler(event):
                 )
                 
                 if result and ("Done!" in result or "تم!" in result):
-                    await event.respond(f"⎉╎✅ تم تغيير اسم البوت {username} إلى: {new_name}")
+                    await event.respond(
+                        f"⎉╎✅ تم تغيير اسم البوت {username} إلى: {new_name}"
+                    )
                 else:
-                    await event.respond(f"⎉╎❌ فشل في تغيير الاسم.\nالرد: {result if result else 'لا يوجد رد'}")
+                    await event.respond(
+                        f"⎉╎❌ فشل في تغيير الاسم.\n"
+                        f"الرد: {result if result else 'لا يوجد رد'}"
+                    )
     except Exception as e:
         await event.respond(f"⎉╎❌ حدث خطأ: {str(e)}")
 
@@ -144,7 +171,7 @@ async def change_desc_handler(event):
             original_msg = await event.get_message()
             username = original_msg.text.split()[-1]
             
-            async with TelegramClient('bot_session', Config.APP_ID, Config.API_HASH) as client:
+            async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
                 result = await interact_with_botfather(
                     client,
                     f"/setdescription {username}\n{new_desc}",
@@ -152,9 +179,14 @@ async def change_desc_handler(event):
                 )
                 
                 if result and ("Done!" in result or "تم!" in result):
-                    await event.respond(f"⎉╎✅ تم تغيير وصف البوت {username}")
+                    await event.respond(
+                        f"⎉╎✅ تم تغيير وصف البوت {username}"
+                    )
                 else:
-                    await event.respond(f"⎉╎❌ فشل في تغيير الوصف.\nالرد: {result if result else 'لا يوجد رد'}")
+                    await event.respond(
+                        f"⎉╎❌ فشل في تغيير الوصف.\n"
+                        f"الرد: {result if result else 'لا يوجد رد'}"
+                    )
     except Exception as e:
         await event.respond(f"⎉╎❌ حدث خطأ: {str(e)}")
 
@@ -162,21 +194,28 @@ async def change_desc_handler(event):
 async def change_pic_handler(event):
     try:
         async with event.client.conversation(event.sender_id) as conv:
-            await conv.send_message("⎉╎أرسل لي الصورة الجديدة للبوت (كصورة وليس كملف):")
+            await conv.send_message(
+                "⎉╎أرسل لي الصورة الجديدة للبوت (كصورة وليس كملف):"
+            )
             pic_response = await conv.get_response()
             
             original_msg = await event.get_message()
             username = original_msg.text.split()[-1]
             
-            if pic_response.photo or pic_response.document.mime_type.startswith('image/'):
-                async with TelegramClient('bot_session', Config.APP_ID, Config.API_HASH) as client:
+            if (pic_response.photo or 
+                (hasattr(pic_response, 'document') and 
+                 pic_response.document.mime_type.startswith('image/'))):
+                
+                async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
                     await client.send_file(
                         'BotFather',
                         pic_response.media,
                         caption=f"/setuserpic {username}"
                     )
                     await asyncio.sleep(5)
-                    await event.respond(f"⎉╎✅ تم استلام الصورة ومعالجتها للبوت {username}")
+                    await event.respond(
+                        f"⎉╎✅ تم استلام الصورة ومعالجتها للبوت {username}"
+                    )
             else:
                 await event.respond("⎉╎❌ لم يتم إرسال صورة صالحة!")
     except Exception as e:
@@ -194,7 +233,8 @@ async def delete_bot_handler(event):
         ]
         
         await event.respond(
-            f"⎉╎هل أنت متأكد من حذف البوت {username}؟ لا يمكن التراجع عن هذا الإجراء!",
+            f"⎉╎هل أنت متأكد من حذف البوت {username}؟\n"
+            "لا يمكن التراجع عن هذا الإجراء!",
             buttons=confirm_buttons
         )
     except Exception as e:
@@ -206,7 +246,7 @@ async def confirm_delete_handler(event):
         original_msg = await event.get_message()
         username = original_msg.text.split()[-2]
         
-        async with TelegramClient('bot_session', Config.APP_ID, Config.API_HASH) as client:
+        async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
             result = await interact_with_botfather(
                 client,
                 f"/deletebot {username}",
@@ -214,9 +254,14 @@ async def confirm_delete_handler(event):
             )
             
             if result and ("Done!" in result or "تم!" in result):
-                await event.respond(f"⎉╎✅ تم حذف البوت {username} بنجاح")
+                await event.respond(
+                    f"⎉╎✅ تم حذف البوت {username} بنجاح"
+                )
             else:
-                await event.respond(f"⎉╎❌ فشل في حذف البوت.\nالرد: {result if result else 'لا يوجد رد'}")
+                await event.respond(
+                    f"⎉╎❌ فشل في حذف البوت.\n"
+                    f"الرد: {result if result else 'لا يوجد رد'}"
+                )
     except Exception as e:
         await event.respond(f"⎉╎❌ حدث خطأ: {str(e)}")
 
@@ -233,7 +278,7 @@ async def get_token_handler(event):
         original_msg = await event.get_message()
         username = original_msg.text.split()[-1]
         
-        async with TelegramClient('bot_session', Config.APP_ID, Config.API_HASH) as client:
+        async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
             token_msg = await interact_with_botfather(
                 client,
                 f"/token {username}",
@@ -244,9 +289,12 @@ async def get_token_handler(event):
                 token = token_msg.split('\n')[-1].strip()
                 await event.respond(
                     f"⎉╎✅ توكن البوت {username}:\n\n`{token}`",
-                    parse_mode='md'
+                    parse_mode='markdown'
                 )
             else:
-                await event.respond(f"⎉╎❌ لم يتم الحصول على التوكن.\nالرد: {token_msg if token_msg else 'لا يوجد رد'}")
+                await event.respond(
+                    f"⎉╎❌ لم يتم الحصول على التوكن.\n"
+                    f"الرد: {token_msg if token_msg else 'لا يوجد رد'}"
+                )
     except Exception as e:
         await event.respond(f"⎉╎❌ حدث خطأ: {str(e)}")
