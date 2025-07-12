@@ -1,12 +1,16 @@
 from telethon import events
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.tl.functions.messages import GetHistoryRequest, GetFullChatRequest
-from telethon.tl.types import MessageActionChannelMigrateFrom, ChannelParticipantsAdmins
+from telethon.tl.types import MessageActionChannelMigrateFrom, ChannelParticipantsAdmins, User, UserFull
 from telethon.errors import ChannelInvalidError, ChannelPrivateError, ChannelPublicGroupNaError
 from telethon.utils import get_input_location
 from datetime import datetime
 from emoji import emojize
 from math import sqrt
+import os
+from contextlib import suppress
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.events import NewMessage
 
 from yamenthon import zedub
 from ..core.managers import edit_or_reply
@@ -155,3 +159,43 @@ async def fetch_info(chat, event):
         caption += f"\n📝┊ <b>الوصف:</b>\n<code>{desc}</code>\n"
     caption += "\n━━━━━━━━━━━━━━━━━━━━━━"
     return caption
+
+@zedub.zed_cmd(pattern="ستوري(?: |$)(.*)")
+async def stories(event):
+    replied = await event.get_reply_message()
+    reply = await edit_or_reply(event, "**⌔∮ جار تنزيل الستوري يرجى الانتظار 🧸♥️**")
+    try:
+        username = event.pattern_match.group(1).strip()
+    except:
+        username = None
+    
+    if not username:
+        if replied and isinstance(replied.sender, User):
+            username = replied.sender_id
+        else:
+            return await reply.edit("**⌔∮ يجب عليك وضع يوزر المستخدم لتنزيل الستوري الخاص به**🧸♥️")
+    
+    with suppress(ValueError):
+        username = int(username)
+    
+    try:
+        full_user = (await event.client(GetFullUserRequest(id=username))).full_user
+    except Exception as er:
+        await reply.edit(f"**❃ خطأ : {er}**")
+        return
+    
+    stories = full_user.stories
+    if not (stories and stories.stories):
+        await reply.edit("**⌔∮ لم يتم العثور على ستوري خاص بالمستخدم**🧸♥️")
+        return
+    
+    for story in stories.stories:
+        client = event.client
+        file = await client.download_media(story.media)
+        await event.reply(
+            story.caption,
+            file=file
+        )
+        os.remove(file)
+    
+    await reply.edit("**⌔∮ تم بنجاح تحميل الستوري ✅**", time=5)
