@@ -43,7 +43,7 @@ async def create_bot(event):
         if not username.startswith('@'):
             username = f"@{username}"
         
-        async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
+        async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
             # التأكد من تسجيل الدخول
             if not await client.is_user_authorized():
                 await event.respond(
@@ -141,7 +141,7 @@ async def change_name_handler(event):
             original_msg = await event.get_message()
             username = original_msg.text.split()[-1]
             
-            async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
+            async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
                 result = await interact_with_botfather(
                     client,
                     f"/setname {username}\n{new_name}",
@@ -171,7 +171,7 @@ async def change_desc_handler(event):
             original_msg = await event.get_message()
             username = original_msg.text.split()[-1]
             
-            async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
+            async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
                 result = await interact_with_botfather(
                     client,
                     f"/setdescription {username}\n{new_desc}",
@@ -206,7 +206,7 @@ async def change_pic_handler(event):
                 (hasattr(pic_response, 'document') and 
                  pic_response.document.mime_type.startswith('image/'))):
                 
-                async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
+                async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
                     await client.send_file(
                         'BotFather',
                         pic_response.media,
@@ -246,7 +246,7 @@ async def confirm_delete_handler(event):
         original_msg = await event.get_message()
         username = original_msg.text.split()[-2]
         
-        async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
+        async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
             result = await interact_with_botfather(
                 client,
                 f"/deletebot {username}",
@@ -278,7 +278,7 @@ async def get_token_handler(event):
         original_msg = await event.get_message()
         username = original_msg.text.split()[-1]
         
-        async with TelegramClient(f'bot_session_{event.sender_id}', Config.APP_ID, Config.API_HASH) as client:
+        async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
             token_msg = await interact_with_botfather(
                 client,
                 f"/token {username}",
