@@ -198,4 +198,4 @@ async def stories(event):
         )
         os.remove(file)
     
-    await reply.edit("**⌔∮ تم بنجاح تحميل الستوري ✅**", time=5)
+    await reply.edit("**⌔∮ تم بنجاح تحميل الستوري ✅**")
