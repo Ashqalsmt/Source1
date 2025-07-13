@@ -1,10 +1,3 @@
-#senzir alheba
-# Copyright (C) 2022 yamen . All Rights Reserved
-#
-# This file is a part of < https://github.com/Zed-Thon/ZelZal/ >
-# PLease read the GNU Affero General Public License in
-# <https://www.github.com/Zed-Thon/ZelZal/blob/main/LICENSE/>.
-#حقوق سينزر تنشر المصدر لو اهينك
 
 import random
 
