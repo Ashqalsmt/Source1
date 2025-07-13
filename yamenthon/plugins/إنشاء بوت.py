@@ -53,7 +53,7 @@ async def create_bot(event):
                 # الحصول على التوكن
                 token_steps = [
     {'command': '/token'},  
-    {'command': f'@{username}', 'expect_multiple_responses': True}  # نضيف هذه العلامة
+    {'command': f'@{username}'}
 ]
 token_results = await interact_with_botfather_step_by_step(client, token_steps)
                 
