@@ -106,7 +106,14 @@ async def _(event):
     user = await event.get_sender()
     rep_dev = (5571722913, 6669024587)
     if user.id in rep_dev:
-        await event.reply(f"**- هـلا ايب منصب**")
+        await event.reply(f"**- هـلا يب منصب سورس يمنثون حبي**")
+
+@zedub.on(events.NewMessage(pattern="السلام عليكم"))
+async def _(event):
+    user = await event.get_sender()
+    rep_dev = (5571722913, 6669024587)
+    if user.id in rep_dev:
+        await event.reply(f"**وعليكم السلام اهلين بمطور السورس💖**")
 
 @zedub.on(events.NewMessage(pattern="منو عمك؟"))
 async def _(event):
