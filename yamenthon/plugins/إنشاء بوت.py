@@ -52,7 +52,8 @@ async def create_bot(event):
             if "Done!" in final_response or "تم!" in final_response or "token" in final_response.lower():
                 # الحصول على التوكن
                 token_steps = [
-                    {'command': f'/token @{username}'}
+                    {'command': '/token'},
+                    {'command': f'@{username}'}
                 ]
                 token_results = await interact_with_botfather_step_by_step(client, token_steps)
                 
@@ -68,7 +69,7 @@ async def create_bot(event):
                         f"⎉╎✅ تم إنشاء البوت بنجاح!\n\n"
                         f"⎉╎اليوزر: @{username}\n"
                         f"⎉╎التوكن: `{token}`\n\n"
-                        f"⎉╎يمكنك التحكم فيه باستخدام الأمر:\n`.تحكم @{username}`",
+                        f"⎉╎يمكنك التحكم فيه باستخدام الأمر:\n`.تعديل @{username}`",
                         parse_mode='md'
                     )
                 else:
