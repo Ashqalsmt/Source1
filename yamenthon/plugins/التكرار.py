@@ -332,30 +332,14 @@ async def react_spam(event):
     zedevent = await edit_or_reply(event, "**- جـارِ بدء التفاعـلات انتظـر ...**")
     if isinstance(msg.peer_id, types.PeerUser):
         emoji = [
-            "👍",
-            "👎",
-            "❤",
-            "🔥",
-            "🥰",
-            "👏",
-            "😁",
-            "🤔",
-            "🤯",
-            "😱",
-            "🤬",
-            "😢",
-            "🎉",
-            "🤩",
-            "🤮",
-            "💩",
+            "👍", "👎", "❤", "🔥", "🥰", "👏", "😁", "🤔",
+            "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩",
         ]
     else:
         getchat = await event.client(GetFullChannelRequest(channel=event.chat_id))
         grp_emoji = getchat.full_chat.available_reactions
         if not grp_emoji:
-            return await edit_delete(
-                event, "**- اووبـس .. التعابير غير مفعلة في هـذه الدردشـة**", 6
-            )
+            return await edit_delete(event, "**- التعابير غير مفعلة هنا!**", 6)
         emoji = grp_emoji
     addgvar("spamwork", True)
     await zedevent.delete()
@@ -363,8 +347,13 @@ async def react_spam(event):
         for i in emoji:
             await asyncio.sleep(0.2)
             try:
-                await event.client.send_reaction(msg.chat_id, msg.id, i)
-            except ForbiddenError:
+                await event.client(functions.messages.SendReactionRequest(
+                    peer=msg.chat_id,
+                    msg_id=msg.id,
+                    reaction=[types.ReactionEmoji(emoticon=i)],
+                ))
+            except Exception as e:
+                print(f"Error: {e}")
                 pass
 
 @zedub.zed_cmd(pattern="ايقاف التكرار ?(.*)")
