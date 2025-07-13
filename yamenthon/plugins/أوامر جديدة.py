@@ -126,19 +126,29 @@ async def _(event):
 async def _(zthon):
     chat = "@TempMailBot"
     geez = await zthon.edit("**جاري انشاء بريد ...**")
-    async with bot.conversation(chat) as conv:
-        try:
-            response = conv.wait_event(events.NewMessage(                incoming=True,                from_users=220112646            )            )            
+    try:
+        async with bot.conversation(chat) as conv:
             await conv.send_message("/start")
             await asyncio.sleep(1)
             await conv.send_message("/create")
-            response = await response
-            iqthonbot = ((response).reply_markup.rows[2].buttons[0].url)
-            await iqthon.client.send_read_acknowledge(conv.chat_id)
-        except YouBlockedUserError:
-            await geez.edit("**قم بفتح الحظر عن : @TempMailBot للأستمرار بانشاء البريدات**")
-            return
-        await iqthon.edit(f"بريدك الخاص هوه : ~ `{response.message.message}`\n[انقر هنا للتحقق من رسائل بريدك]({iqthonbot})")
+            
+            # انتظر الرد الذي يحتوي البريد بعد /create
+            response = await conv.get_response()
+
+            # استخراج رابط البريد من الزر
+            iqthonbot = response.reply_markup.rows[2].buttons[0].url
+
+            # تأكيد قراءة الرسالة
+            await bot.send_read_acknowledge(chat)
+
+            await geez.edit(
+                f"بريدك الخاص هوه : ~ `{response.message}`\n"
+                f"[انقر هنا للتحقق من رسائل بريدك]({iqthonbot})"
+            )
+    except YouBlockedUserError:
+        await geez.edit("**قم بفتح الحظر عن : @TempMailBot للأستمرار بانشاء البريدات**")
+    except Exception as e:
+        await geez.edit(f"⎉╎❌ حدث خطأ: `{str(e)}`")
 
 @zedub.zed_cmd(
     pattern="تفليش بالطرد$",
