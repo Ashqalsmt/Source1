@@ -28,86 +28,52 @@ async def interact_with_botfather(client, command, wait_for=None, timeout=30):
     except Exception as e:
         return f"حدث خطأ أثناء التفاعل مع بوت فاذر: {str(e)}"
 
-@zedub.on(events.NewMessage(pattern=r'\.صنع بوت (.*)'))
+@zedub.on(events.NewMessage(pattern=r'\.صنع بوت$'))
 async def create_bot(event):
     try:
-        input_str = event.pattern_match.group(1)
-        if ' ' not in input_str:
-            await event.respond(
-                "⎉╎يجب كتابة اسم البوت ويوزره مع المسافة بينهم!\n"
-                "مثال: `.صنع بوت MyBot mybot`",
-                parse_mode='markdown'
-            )
-            return
-            
-        name, username = input_str.split(' ', 1)
+        await event.reply("⎉╎أرسل اسم البوت (الاسم الذي يظهر للناس):")
+        name_msg = await zedub.wait_for(events.NewMessage(from_users=event.sender_id), timeout=60)
+        name = name_msg.text.strip()
+
+        await event.reply("⎉╎أرسل اليوزر الذي تريده للبوت (يجب أن ينتهي بـ Bot):")
+        user_msg = await zedub.wait_for(events.NewMessage(from_users=event.sender_id), timeout=60)
+        username = user_msg.text.strip()
         if not username.startswith('@'):
             username = f"@{username}"
-        
+
         async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
-            # التأكد من تسجيل الدخول
             if not await client.is_user_authorized():
                 await event.respond(
-                    "⎉╎❌ يجب تسجيل الدخول أولاً!\n"
-                    "استخدم الأمر `.تسجيل` لإنشاء جلسة",
-                    parse_mode='markdown'
+                    "⎉╎❌ يجب تسجيل الدخول أولاً!\nاستخدم الأمر `.تسجيل` لإنشاء جلسة"
                 )
                 return
-            
-            # إنشاء البوت
-            result = await interact_with_botfather(
-                client,
-                f"/newbot\n{name}\n{username}",
-                wait_for=True
-            )
-            
-            if not result:
-                await event.respond("⎉╎❌ لم يتم الحصول على رد من بوت فاذر")
-                return
-                
-            if "Done!" in result or "تم!" in result or "Choose a name" in result:
-                # انتظر 3 ثوان قبل طلب التوكن
-                await asyncio.sleep(3)
-                
-                # الحصول على التوكن
-                token_msg = await interact_with_botfather(
-                    client,
-                    f"/token {username}",
-                    wait_for=True
-                )
-                
-                if not token_msg:
-                    await event.respond(
-                        f"⎉╎✅ تم إنشاء البوت: {username}\n"
-                        "ولكن لم يتم الحصول على التوكن"
-                    )
-                    return
-                    
-                if "Use this token" in token_msg or "استخدم هذا الرمز" in token_msg:
-                    token = token_msg.split('\n')[-1].strip()
+
+            async with client.conversation('BotFather', timeout=60) as conv:
+                await conv.send_message("/newbot")
+                res1 = await conv.get_response()
+                await conv.send_message(name)
+                res2 = await conv.get_response()
+                await conv.send_message(username)
+                res3 = await conv.get_response()
+
+                if "token" in res3.raw_text.lower():
+                    token = res3.raw_text.splitlines()[-1].strip()
                     await event.respond(
                         f"⎉╎✅ تم إنشاء البوت بنجاح!\n\n"
+                        f"⎉╎الاسم: {name}\n"
                         f"⎉╎اليوزر: {username}\n"
-                        f"⎉╎التوكن: `{token}`\n\n"
-                        f"⎉╎يمكنك التحكم فيه باستخدام الأمر:\n`.تعديل {username}`",
-                        parse_mode='markdown'
+                        f"⎉╎التوكن:\n`{token}`\n\n"
+                        f"⎉╎يمكنك التحكم فيه باستخدام الأمر:\n`.تعديل {username}`"
                     )
                 else:
                     await event.respond(
-                        f"⎉╎✅ تم إنشاء البوت: {username}\n"
-                        f"ولكن لم يتم الحصول على التوكن.\nالرد: {token_msg}"
+                        f"⎉╎❌ فشل في إنشاء البوت. الرد من BotFather:\n{res3.raw_text}"
                     )
-            else:
-                await event.respond(
-                    f"⎉╎❌ فشل في إنشاء البوت. قد يكون اليوزر محجوزاً.\n\n"
-                    f"الرد من بوت فاذر:\n{result}"
-                )
-                
+
+    except asyncio.TimeoutError:
+        await event.respond("⎉╎❌ انتهى الوقت، لم يتم الرد في الوقت المحدد.")
     except Exception as e:
-        await event.respond(
-            f"⎉╎❌ حدث خطأ غير متوقع:\n"
-            f"{type(e).__name__}: {str(e)}"
-        )
+        await event.respond(f"⎉╎❌ حدث خطأ:\n`{type(e).__name__}`: {str(e)}")
 
 @zedub.on(events.NewMessage(pattern=r'\.تعديل (@?\w+)'))
 async def manage_bot(event):
