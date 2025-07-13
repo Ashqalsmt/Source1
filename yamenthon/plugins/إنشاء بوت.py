@@ -52,7 +52,7 @@ async def create_bot(event):
             if "Done!" in final_response or "تم!" in final_response or "token" in final_response.lower():
                 # الحصول على التوكن
                 token_steps = [
-                    {'command': '/token'},
+                    {'command': '/token', 'ignore_response': True},
                     {'command': f'@{username}'}
                 ]
                 token_results = await interact_with_botfather_step_by_step(client, token_steps)
