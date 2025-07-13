@@ -363,10 +363,9 @@ async def react_spam(event):
         for i in emoji:
             await asyncio.sleep(0.2)
             try:
-                await msg.react(i, True)
+                await event.client.send_reaction(msg.chat_id, msg.id, i)
             except ForbiddenError:
                 pass
-
 
 @zedub.zed_cmd(pattern="ايقاف التكرار ?(.*)")
 async def stopspamrz(event):
