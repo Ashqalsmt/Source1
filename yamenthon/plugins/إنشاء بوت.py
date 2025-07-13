@@ -52,20 +52,33 @@ async def create_bot(event):
             if "Done!" in final_response or "تم!" in final_response or "token" in final_response.lower():
                 # الحصول على التوكن
                 token_steps = [
-    {'command': '/token'},  
+    {'command': '/token'},
     {'command': f'@{username}'}
 ]
+
 token_results = await interact_with_botfather_step_by_step(client, token_steps)
-                
-                if not token_results:
-                    await event.respond(f"⎉╎✅ تم إنشاء البوت: @{username} ولكن لم يتم الحصول على التوكن")
-                    return
-                    
-                token_response = token_results[0]
-                
-                if "Use this token" in token_response or "استخدم هذا الرمز" in token_response:
-                    token = token_response.split('\n')[-1].strip()
-                    await event.respond(
+
+if not token_results or len(token_results) < 2:
+    await event.respond(f"⎉╎✅ تم إنشاء البوت: @{username} ولكن لم يتم الحصول على التوكن")
+    return
+
+# أخذ الرد الذي يأتي بعد إرسال @username فقط
+token_response = token_results[1]  # الرد الثاني فقط
+
+if "Use this token" in token_response or "استخدم هذا الرمز" in token_response:
+    # استخراج التوكن من السطر الذي يحتوي عليه
+    lines = token_response.splitlines()
+    token = ""
+    for line in lines:
+        if line.strip().startswith("`") and line.strip().endswith("`"):
+            token = line.strip().strip("`")
+            break
+        elif "bot" in line and len(line.strip()) > 40:
+            token = line.strip()
+            break
+
+    if token:
+        await event.respond(
                         f"⎉╎✅ تم إنشاء البوت بنجاح!\n\n"
                         f"⎉╎اليوزر: @{username}\n"
                         f"⎉╎التوكن: `{token}`\n\n"
