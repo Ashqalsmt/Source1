@@ -3,6 +3,7 @@ from yamenthon import zedub
 from telethon import events, TelegramClient
 from telethon.tl.custom import Button
 from telethon.sessions import StringSession
+from telethon import functions
 from ..Config import Config
 
 plugin_category = "البوتات"
@@ -31,16 +32,31 @@ async def interact_with_botfather(client, command, wait_for=None, timeout=30):
 @zedub.on(events.NewMessage(pattern=r'\.صنع بوت$'))
 async def create_bot(event):
     try:
-        await event.reply("⎉╎أرسل اسم البوت (الاسم الذي يظهر للناس):")
-        name_msg = await zedub.wait_for(events.NewMessage(from_users=event.sender_id), timeout=60)
-        name = name_msg.text.strip()
+        async with zedub.conversation(event.sender_id, timeout=120) as conv:
+            await conv.send_message("⎉╎أرسل اسم البوت (الاسم الذي يظهر للناس):")
+            name_msg = await conv.get_response()
+            name = name_msg.text.strip()
 
-        await event.reply("⎉╎أرسل اليوزر الذي تريده للبوت (يجب أن ينتهي بـ Bot):")
-        user_msg = await zedub.wait_for(events.NewMessage(from_users=event.sender_id), timeout=60)
-        username = user_msg.text.strip()
-        if not username.startswith('@'):
-            username = f"@{username}"
+            while True:
+                await conv.send_message("⎉╎أرسل اليوزر الذي تريده للبوت (يجب أن ينتهي بـ Bot):")
+                user_msg = await conv.get_response()
+                username = user_msg.text.strip()
+                if not username.lower().endswith("bot"):
+                    await conv.send_message("⎉╎❌ يجب أن ينتهي اسم المستخدم بـ 'Bot'")
+                    continue
 
+                if not username.startswith("@"):
+                    username = f"@{username}"
+
+                # التحقق إذا اليوزر محجوز
+                try:
+                    await zedub(functions.contacts.ResolveUsernameRequest(username.replace("@", "")))
+                    await conv.send_message("⎉╎❌ هذا اليوزر محجوز، جرب يوزر آخر.")
+                except:
+                    # غير محجوز
+                    break
+
+        # بدأ التفاعل مع بوت فاذر
         async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
             if not await client.is_user_authorized():
                 await event.respond(
@@ -48,11 +64,13 @@ async def create_bot(event):
                 )
                 return
 
-            async with client.conversation('BotFather', timeout=60) as conv:
+            async with client.conversation("BotFather", timeout=120) as conv:
                 await conv.send_message("/newbot")
-                res1 = await conv.get_response()
+                await conv.get_response()
+
                 await conv.send_message(name)
-                res2 = await conv.get_response()
+                await conv.get_response()
+
                 await conv.send_message(username)
                 res3 = await conv.get_response()
 
