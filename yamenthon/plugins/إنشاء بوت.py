@@ -7,6 +7,10 @@ from ..Config import Config
 
 plugin_category = "البوتات"
 
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
+#     الدوال المساعدة     #
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
+
 async def interact_with_botfather_step_by_step(client, steps):
     try:
         async with client.conversation('BotFather', timeout=30) as conv:
@@ -17,24 +21,44 @@ async def interact_with_botfather_step_by_step(client, steps):
                 responses.append(response.text)
             return responses
     except asyncio.TimeoutError:
-        return "انتهت المهلة أثناء انتظار الرد من بوت فاذر"
+        return "⏳ انتهت المهلة أثناء انتظار الرد من بوت فاذر"
     except Exception as e:
-        return f"حدث خطأ أثناء التفاعل مع بوت فاذر: {str(e)}"
+        return f"⚠️ حدث خطأ أثناء التفاعل مع بوت فاذر: {str(e)}"
+
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
+#     صنع بوت جديد     #
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
 
 @zedub.on(events.NewMessage(pattern=r'\.صنع بوت (.*)'))
 async def create_bot(event):
     try:
         input_str = event.pattern_match.group(1)
+        
+        # التحقق من صحة المدخلات
         if ' ' not in input_str:
-            await event.respond("⎉╎يجب كتابة اسم البوت ويوزره مع المسافة بينهم!\nمثال: `.صنع بوت MyBot mybot`")
+            await event.respond(
+                "**⎉╎خطأ في الصيغة!**\n"
+                "**⎉╎يجب كتابة اسم البوت ويوزره مع المسافة بينهم**\n"
+                "**⎉╎مثال:** `.صنع بوت MyBot mybot`\n"
+                "**⎉╎ملاحظة:** اليوزر يجب أن ينتهي بـ `bot` أو `_bot`"
+            )
             return
             
         name, username = input_str.split(' ', 1)
         if username.startswith('@'):
             username = username[1:]
         
+        # التحقق من صحة اليوزرنيم
+        if not (username.lower().endswith('bot') or username.lower().endswith('_bot')):
+            await event.respond(
+                "**⎉╎خطأ في اليوزر!**\n"
+                "**⎉╎يجب أن ينتهي يوزر البوت بـ `bot` أو `_bot`**\n"
+                "**⎉╎مثال:** `mybot` أو `my_bot`"
+            )
+            return
+
         async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
-            # خطوات إنشاء البوت بشكل تسلسلي
+            # خطوات إنشاء البوت
             steps = [
                 {'command': '/newbot'},
                 {'command': name},
@@ -44,56 +68,83 @@ async def create_bot(event):
             results = await interact_with_botfather_step_by_step(client, steps)
             
             if not results or len(results) < 3:
-                await event.respond("⎉╎❌ فشل في إنشاء البوت. لم يتم الحصول على ردود كافية من بوت فاذر")
+                await event.respond(
+                    "**⎉╎فشل في إنشاء البوت!**\n"
+                    "**⎉╎لم يتم الحصول على ردود كافية من بوت فاذر**"
+                )
                 return
                 
             final_response = results[-1]
             
-            if "Done!" in final_response or "تم!" in final_response or "token" in final_response.lower():
+            if any(keyword in final_response for keyword in ["Done!", "تم!", "token"]):
                 # الحصول على التوكن
                 token_steps = [
-    {'command': '/token'},
-    {'command': f'@{username}'}
-]
+                    {'command': '/token'},
+                    {'command': f'@{username}'}
+                ]
 
-token_results = await interact_with_botfather_step_by_step(client, token_steps)
+                token_results = await interact_with_botfather_step_by_step(client, token_steps)
 
-if not token_results or len(token_results) < 2:
-    await event.respond(f"⎉╎✅ تم إنشاء البوت: @{username} ولكن لم يتم الحصول على التوكن")
-    return
-
-# أخذ الرد الذي يأتي بعد إرسال @username فقط
-token_response = token_results[1]  # الرد الثاني فقط
-
-if "Use this token" in token_response or "استخدم هذا الرمز" in token_response:
-    # استخراج التوكن من السطر الذي يحتوي عليه
-    lines = token_response.splitlines()
-    token = ""
-    for line in lines:
-        if line.strip().startswith("`") and line.strip().endswith("`"):
-            token = line.strip().strip("`")
-            break
-        elif "bot" in line and len(line.strip()) > 40:
-            token = line.strip()
-            break
-
-    if token:
-        await event.respond(
-                        f"⎉╎✅ تم إنشاء البوت بنجاح!\n\n"
-                        f"⎉╎اليوزر: @{username}\n"
-                        f"⎉╎التوكن: `{token}`\n\n"
-                        f"⎉╎يمكنك التحكم فيه باستخدام الأمر:\n`.تعديل @{username}`",
-                        parse_mode='md'
+                if not token_results or len(token_results) < 2:
+                    await event.respond(
+                        f"**⎉╎تم إنشاء البوت بنجاح!**\n"
+                        f"**⎉╎اليوزر:** @{username}\n"
+                        f"**⎉╎ولكن لم يتم الحصول على التوكن**"
                     )
+                    return
+
+                token_response = token_results[1]
+                
+                if "Use this token" in token_response or "استخدم هذا الرمز" in token_response:
+                    # استخراج التوكن بدقة
+                    token = None
+                    if '`' in token_response:
+                        token = token_response.split('`')[1]
+                    else:
+                        for line in token_response.split('\n'):
+                            if len(line) > 30 and 'bot' in line.lower():
+                                token = line.strip()
+                                break
+
+                    if token:
+                        await event.respond(
+                            "**⎉╎تم إنشاء البوت بنجاح!** ✅\n\n"
+                            f"**⎉╎اسم البوت:** `{name}`\n"
+                            f"**⎉╎يوزر البوت:** @{username}\n"
+                            f"**⎉╎توكن البوت:** `{token}`\n\n"
+                            "**⎉╎يمكنك التحكم في البوت باستخدام الأمر:**\n"
+                            f"`.تعديل @{username}`",
+                            parse_mode='md'
+                        )
+                    else:
+                        await event.respond(
+                            f"**⎉╎تم إنشاء البوت!**\n"
+                            f"**⎉╎اليوزر:** @{username}\n"
+                            "**⎉╎ولكن لم يتم الحصول على التوكن**\n"
+                            f"**⎉╎الرد:** `{token_response[:100]}...`"
+                        )
                 else:
-                    await event.respond(f"⎉╎✅ تم إنشاء البوت: @{username} ولكن لم يتم الحصول على التوكن.\nالرد: {token_response}")
+                    await event.respond(
+                        f"**⎉╎تم إنشاء البوت!**\n"
+                        f"**⎉╎اليوزر:** @{username}\n"
+                        "**⎉╎ولكن لم يتم الحصول على التوكن**"
+                    )
             else:
-                await event.respond(f"⎉╎❌ فشل في إنشاء البوت. قد يكون اليوزر محجوزاً.\n\nالرد من بوت فاذر:\n{final_response}")
+                await event.respond(
+                    "**⎉╎فشل في إنشاء البوت!** ❌\n"
+                    "**⎉╎قد يكون اليوزر محجوزاً أو غير صالح**\n\n"
+                    f"**⎉╎الرد من بوت فاذر:**\n`{final_response}`"
+                )
                 
     except Exception as e:
-        await event.respond(f"⎉╎❌ حدث خطأ غير متوقع: {str(e)}")
+        await event.respond(
+            "**⎉╎حدث خطأ غير متوقع!** ‼️\n"
+            f"**⎉╎الخطأ:** `{str(e)}`"
+        )
 
-# باقي الكود يبقى كما هو بدون تغيير ...
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
+#    إدارة البوتات    #
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
 
 @zedub.on(events.NewMessage(pattern=r'\.تعديل (@?\w+)'))
 async def manage_bot(event):
@@ -103,25 +154,36 @@ async def manage_bot(event):
             username = f"@{username}"
         
         buttons = [
-            [Button.inline("تغيير اسم البوت", b"change_name")],
-            [Button.inline("تغيير وصف البوت", b"change_desc")],
-            [Button.inline("تغيير صورة البوت", b"change_pic")],
-            [Button.inline("حذف البوت", b"delete_bot")],
-            [Button.inline("الحصول على التوكن", b"get_token")],
+            [Button.inline("🔄 تغيير اسم البوت", b"change_name")],
+            [Button.inline("📝 تغيير وصف البوت", b"change_desc")],
+            [Button.inline("🖼️ تغيير صورة البوت", b"change_pic")],
+            [Button.inline("🗑️ حذف البوت", b"delete_bot")],
+            [Button.inline("🔑 الحصول على التوكن", b"get_token")],
         ]
         
         await event.respond(
-            f"⎉╎اختر ما تريد فعله مع البوت {username}:",
+            f"**⎉╎مرحباً بك في لوحة تحكم البوت** {username}\n"
+            "**⎉╎اختر الإجراء الذي تريد تنفيذه:**",
             buttons=buttons
         )
     except Exception as e:
-        await event.respond(f"⎉╎❌ حدث خطأ: {str(e)}")
+        await event.respond(
+            "**⎉╎حدث خطأ!** ‼️\n"
+            f"**⎉╎الخطأ:** `{str(e)}`"
+        )
+
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
+#    معالجة الأزرار    #
+# ┈┅━╍╍━━┅┈┅━━╍╍━┅┈ #
 
 @zedub.on(events.CallbackQuery(data=b"change_name"))
 async def change_name_handler(event):
     try:
         async with event.client.conversation(event.sender_id) as conv:
-            await conv.send_message("⎉╎أرسل لي الاسم الجديد للبوت:")
+            await conv.send_message(
+                "**⎉╎أرسل الاسم الجديد للبوت:**\n"
+                "**⎉╎ملاحظة:** يجب أن يكون الاسم بين 3-64 حرف"
+            )
             name_response = await conv.get_response()
             new_name = name_response.text
             
@@ -129,24 +191,39 @@ async def change_name_handler(event):
             username = original_msg.text.split()[-1]
             
             async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
-                result = await interact_with_botfather(
-                    client,
-                    f"/setname {username}\n{new_name}",
-                    wait_for=True
-                )
+                steps = [
+                    {'command': f'/setname {username}'},
+                    {'command': new_name}
+                ]
+                result = await interact_with_botfather_step_by_step(client, steps)
                 
-                if result and ("Done!" in result or "تم!" in result):
-                    await event.respond(f"⎉╎✅ تم تغيير اسم البوت {username} إلى: {new_name}")
+                if result and any(keyword in result[-1] for keyword in ["Done!", "تم!"]):
+                    await event.respond(
+                        f"**⎉╎تم تغيير اسم البوت بنجاح!** ✅\n"
+                        f"**⎉╎اليوزر:** {username}\n"
+                        f"**⎉╎الاسم الجديد:** `{new_name}`"
+                    )
                 else:
-                    await event.respond(f"⎉╎❌ فشل في تغيير الاسم.\nالرد: {result if result else 'لا يوجد رد'}")
+                    await event.respond(
+                        "**⎉╎فشل في تغيير الاسم!** ❌\n"
+                        f"**⎉╎الرد:** `{result[-1] if result else 'لا يوجد رد'}`"
+                    )
     except Exception as e:
-        await event.respond(f"⎉╎❌ حدث خطأ: {str(e)}")
+        await event.respond(
+            "**⎉╎حدث خطأ!** ‼️\n"
+            f"**⎉╎الخطأ:** `{str(e)}`"
+        )
+
+# باقي الدوال بنفس النمط مع الزخارف...
 
 @zedub.on(events.CallbackQuery(data=b"change_desc"))
 async def change_desc_handler(event):
     try:
         async with event.client.conversation(event.sender_id) as conv:
-            await conv.send_message("⎉╎أرسل لي الوصف الجديد للبوت:")
+            await conv.send_message(
+                "**⎉╎أرسل الوصف الجديد للبوت:**\n"
+                "**⎉╎ملاحظة:** يمكن أن يصل طول الوصف إلى 512 حرف"
+            )
             desc_response = await conv.get_response()
             new_desc = desc_response.text
             
@@ -154,18 +231,30 @@ async def change_desc_handler(event):
             username = original_msg.text.split()[-1]
             
             async with TelegramClient(StringSession(Config.STRING_SESSION), Config.APP_ID, Config.API_HASH) as client:
-                result = await interact_with_botfather(
-                    client,
-                    f"/setdescription {username}\n{new_desc}",
-                    wait_for=True
-                )
+                steps = [
+                    {'command': f'/setdescription {username}'},
+                    {'command': new_desc}
+                ]
+                result = await interact_with_botfather_step_by_step(client, steps)
                 
-                if result and ("Done!" in result or "تم!" in result):
-                    await event.respond(f"⎉╎✅ تم تغيير وصف البوت {username}")
+                if result and any(keyword in result[-1] for keyword in ["Done!", "تم!"]):
+                    await event.respond(
+                        f"**⎉╎تم تغيير وصف البوت بنجاح!** ✅\n"
+                        f"**⎉╎اليوزر:** {username}"
+                    )
                 else:
-                    await event.respond(f"⎉╎❌ فشل في تغيير الوصف.\nالرد: {result if result else 'لا يوجد رد'}")
+                    await event.respond(
+                        "**⎉╎فشل في تغيير الوصف!** ❌\n"
+                        f"**⎉╎الرد:** `{result[-1] if result else 'لا يوجد رد'}`"
+                    )
     except Exception as e:
-        await event.respond(f"⎉╎❌ حدث خطأ: {str(e)}")
+        await event.respond(
+            "**⎉╎حدث خطأ!** ‼️\n"
+            f"**⎉╎الخطأ:** `{str(e)}`"
+        )
+
+# يمكنك إضافة باقي الدوال بنفس النمط...
+
 
 @zedub.on(events.CallbackQuery(data=b"change_pic"))
 async def change_pic_handler(event):
