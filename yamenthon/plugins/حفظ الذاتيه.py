@@ -47,13 +47,25 @@ async def oho(event):
     await event.delete()
 
 @zedub.zed_cmd(pattern="(تفعيل الذاتيه|تفعيل الذاتية)")
-async def start_datea(event):
-    global repself
-    if repself:
-        return await edit_or_reply(event, "**「❖╎حفظ الذاتيـة التلقـائي .. مفعـله مسبقـاً ☑️**")
-    repself = True
-    await edit_or_reply(event, "**「❖╎تم تفعيـل حفظ الذاتيـة التلقائـي .. بنجـاح ☑️**")
-
+async def oho(event):
+    if not event.is_reply:
+        return await event.edit("**- ❝ ⌊بالـرد علـى صورة ذاتيـة التدميـر 𓆰...**")
+    reply_msg = await event.get_reply_message()
+    if not (reply_msg.photo or reply_msg.video):
+        return await event.edit("**- ❝ ⌊الرسالة المردود عليها ليست صورة أو فيديو 𓆰...**")
+    
+    try:
+        pic = await reply_msg.download_media()
+        if not pic:  # إذا كان الملف غير موجود
+            return await event.edit("**- ❝ ⌊فشل تنزيل الملف 𓆰...**")
+        
+        await zedub.send_file("me", pic, caption=f"**「❖╎تم حفـظ الصـورة الذاتيـه .. بنجـاح ☑️𓆰**")
+        await event.delete()
+        os.remove(pic)  # حذف الملف المؤقت بعد الإرسال
+    except Exception as e:
+        await event.edit(f"**- ❝ ⌊حدث خطأ أثناء حفظ الذاتية: {str(e)} 𓆰...**")
+        if pic and os.path.exists(pic):
+            os.remove(pic)  # حذف الملف المؤقت في حالة الخطأ
 @zedub.zed_cmd(pattern="(تعطيل الذاتيه|تعطيل الذاتية)")
 async def stop_datea(event):
     global repself
@@ -72,9 +84,26 @@ async def sddm(event):
     if repself:
         sender = await event.get_sender()
         chat = await event.get_chat()
-        pic = await event.download_media()
-        await zedub.send_file("me", pic, caption=f"[ᯓ 𝗦𝗼𝘂𝗿𝗰𝗲 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - حفـظ الذاتيـه 🧧](t.me/YamenThon) .\n\n⋆┄─┄─┄─┄┄─┄─┄─┄─┄┄⋆\n**⌔╎مࢪحبـاً عـزيـزي المـالك 🫂\n⌔╎ تـم حفـظ الذاتيـة تلقائيـاً .. بنجـاح ☑️** ❝\n**⌔╎المـرسـل** {_format.mentionuser(sender.first_name , sender.id)} .")
-
+        try:
+            pic = await event.download_media()
+            if not pic:
+                return  # لا تفعل شيئًا إذا فشل التنزيل
+            
+            await zedub.send_file(
+                "me", 
+                pic, 
+                caption=(
+                    f"[ᯓ 𝗦𝗼𝘂𝗿𝗰𝗲 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - حفـظ الذاتيـه 🧧](t.me/YamenThon) .\n\n"
+                    f"⋆┄─┄─┄─┄┄─┄─┄─┄─┄┄⋆\n"
+                    f"**⌔╎مࢪحبـاً عـزيـزي المـالك 🫂\n"
+                    f"⌔╎ تـم حفـظ الذاتيـة تلقائيـاً .. بنجـاح ☑️** ❝\n"
+                    f"**⌔╎المـرسـل** {_format.mentionuser(sender.first_name , sender.id)} ."
+                )
+            )
+            if pic and os.path.exists(pic):
+                os.remove(pic)  # تنظيف الملف المؤقت
+        except Exception as e:
+            LOGS.error(f"حدث خطأ في حفظ الذاتية تلقائياً: {e}")
 #Code For T.me/T_A_Tl
 @zedub.zed_cmd(pattern="اعلان (\d*) ([\s\S]*)")
 async def selfdestruct(destroy):
