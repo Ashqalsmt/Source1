@@ -2814,6 +2814,7 @@ async def zed_help(event):
             buttons=[
                 [
                     Button.inline("فيديو", data="vedzed"),
+                    Button.inline("ستوري تلي💖", data="yyamm"),
                     Button.inline("بحث", data="songzed"),
                 ],
                 [
@@ -2876,6 +2877,22 @@ async def _(event):
             [Button.inline("رجوع", data="zdownload")],
         ],
     link_preview=False)
+
+@zedub.tgbot.on(CallbackQuery(data=re.compile(rb"yyamm")))
+@check_owner
+async def _(event):
+    await event.edit(
+        """[ᯓ 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 𝗨𝘀𝗲𝗿𝗯𝗼𝘁 - اوامــر البحـث والتحميــل 🛰](t.me/YamenThon) .
+**- الامـر :**
+**⪼** `.ستوري`
+
+**⪼** الاستخـدام برد على الشخص الذي تريد تحميل الاستوري الخاص به
+او ارسال الامر معا يوزر الشخص  مثـال `.ستوري @T_A_Tl` 💌💯 خاص بتحميل ستوريات التلي فقط""",
+        buttons=[
+            [Button.inline("رجوع", data="zdownload")],
+        ],
+    link_preview=False)
+
 
 @zedub.tgbot.on(CallbackQuery(data=re.compile(rb"vedzed")))
 @check_owner
