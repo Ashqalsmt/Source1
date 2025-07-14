@@ -104,23 +104,32 @@ async def rep(event):
 @zedub.on(events.NewMessage(pattern="منصب؟"))
 async def _(event):
     user = await event.get_sender()
-    rep_dev = (5571722913, 6669024587)
-    if user.id in rep_dev:
-        await event.reply(f"**- هـلا يب منصب سورس يمنثون حبي**")
+    me = await event.client.get_me()
+    zed_dev = 5571722913
+    if user.id == zed_dev and user.id == me.id:
+        return
+    if user.id == zed_dev:
+        await event.reply("**يب منصب حبي 🙈♥ .**")
 
 @zedub.on(events.NewMessage(pattern="السلام عليكم"))
 async def _(event):
     user = await event.get_sender()
-    rep_dev = (5571722913, 6669024587)
-    if user.id in rep_dev:
-        await event.reply(f"**وعليكم السلام اهلين بمطور السورس💖**")
-
-@zedub.on(events.NewMessage(pattern="منو عمك؟"))
+    me = await event.client.get_me()
+    zed_dev = 5571722913
+    if user.id == zed_dev and user.id == me.id:
+        return
+    if user.id == zed_dev:
+        await event.reply("**وعليكم السلام اهلين بمطور السورس💖🌹**")
+        
+@zedub.on(events.NewMessage(pattern="منو عمك"))
 async def _(event):
     user = await event.get_sender()
-    rep_dev = (5571722913, 6669024587)
-    if user.id in rep_dev:
-        await event.reply(f"**- انت عمي و تاج راسي @T_A_Tl**")
+    me = await event.client.get_me()
+    zed_dev = 5571722913
+    if user.id == zed_dev and user.id == me.id:
+        return
+    if user.id == zed_dev:
+        await event.reply("**- انت عمي و تاج راسي @T_A_Tl**")
 
 @zedub.on(admin_cmd(pattern="انشاء بريد(?: |$)(.*)"))
 async def _(zedub):
