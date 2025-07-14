@@ -30,7 +30,7 @@ zel_dev = (
 import random
 
 
-@zedub.zed_cmd(pattern="رابط الحذف")
+@zedub.zed_cmd(pattern="حذف الحساب")
 async def _(zed):
     await edit_or_reply(
         zed,
