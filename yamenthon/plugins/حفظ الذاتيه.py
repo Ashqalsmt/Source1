@@ -62,7 +62,7 @@ async def stop_datea(event):
         return await edit_or_reply(event, "**⎉╎تم تعطيـل حفظ الذاتيـة التلقائـي .. بنجـاح ☑️**")
     await edit_or_reply(event, "**⎉╎حفظ الذاتيـة التلقـائي .. معطلـه مسبقـاً ☑️**")
 
-@zedub.on(events.NewMessage(func=lambda e: e.is_private and (e.photo or e.video) and e.media_unread))
+@zedub.on(events.NewMessage(func=lambda e: e.is_private and (e.photo or e.video or e.voice) and getattr(e.media, 'ttl_seconds', None) is not None))
 async def sddm(event):
     global repself
     baqir = event.sender_id
@@ -72,9 +72,12 @@ async def sddm(event):
     if repself:
         sender = await event.get_sender()
         chat = await event.get_chat()
-        pic = await event.download_media()
-        await zedub.send_file("me", pic, caption=f"[ᯓ 𝗦𝗼𝘂𝗿𝗰𝗲 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - حفـظ الذاتيـه 🧧](t.me/YamenThon) .\n\n⋆┄─┄─┄─┄┄─┄─┄─┄─┄┄⋆\n**⌔╎مࢪحبـاً عـزيـزي المـالك 🫂\n⌔╎ تـم حفـظ الذاتيـة تلقائيـاً .. بنجـاح ☑️** ❝\n**⌔╎المـرسـل** {_format.mentionuser(sender.first_name , sender.id)} .")
-
+        media = await event.download_media()
+        await zedub.send_file(
+            "me",
+            media,
+            caption=f"[ᯓ 𝗦𝗼𝘂𝗿𝗰𝗲 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - حفـظ الذاتيـه 🧧](t.me/YamenThon) .\n\n⋆┄─┄─┄─┄┄─┄─┄─┄─┄┄⋆\n**⌔╎مࢪحبـاً عـزيـزي المـالك 🫂\n⌔╎ تـم حفـظ ميديـا ذاتيـة التدمـير .. بنجـاح ☑️** ❝\n**⌔╎المـرسـل** {_format.mentionuser(sender.first_name , sender.id)} ."
+        )
 
 @zedub.zed_cmd(pattern="اعلان (\d*) ([\s\S]*)")
 async def selfdestruct(destroy):
