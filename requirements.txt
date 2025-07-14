@@ -81,4 +81,4 @@ yt-dlp==2024.4.9
 img2html
 googletrans-py
 ntgcalls
-pytgcalls
+
