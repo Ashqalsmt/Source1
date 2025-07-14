@@ -59,7 +59,28 @@ async def permalink(mention):
     )
 
 
- 
+ @zedub.on(admin_cmd(pattern=r"رفع(?:\s|$)([\s\S]*)"))
+async def permalink(mention):
+    """يرد على أي أمر يبدأ بـ رفع ويلحق اللقب المرسل في الرد."""
+    user, custom = await get_user_from_event(mention)
+    if not user:
+        return
+    if user.id == 5571722913:
+        return await edit_or_reply(mention, "**- لكك دي هذا المطور يا تعبان 😂**")
+
+    # إذا لم يدخل لقب، نعطي لقب افتراضي "جلب"
+    title = custom.strip() if custom else "قلبي"
+
+    jepthon = user.first_name.replace("\u2060", "") if user.first_name else user.username
+    me = await mention.client.get_me()
+    my_mention = f"[{me.first_name}](tg://user?id={me.id})"
+
+    await edit_or_reply(
+        mention,
+        f"**᯽︙ المستخدم** [{jepthon}](tg://user?id={user.id})\n"
+        f"**᯽︙  تم رفعه {title} بواسطة :** {my_mention}\n"
+        f"**᯽︙  🌚🌚🌚🌚**"
+    )
 
 
 @zedub.zed_cmd(pattern="رفع مرتي(?: |$)(.*)")
