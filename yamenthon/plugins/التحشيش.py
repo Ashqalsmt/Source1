@@ -59,7 +59,7 @@ async def permalink(mention):
     )
 
 
-@zedub.on(admin_cmd(pattern=r"رفع(?:\s|$)([\s\S]*)"))
+@zedub.zed_cmd(pattern=r"رفع(?:\s|$)([\s\S]*)")
 async def permalink(mention):
     user, custom = await get_user_from_event(mention)
     if not user:
