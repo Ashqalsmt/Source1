@@ -5,13 +5,13 @@ import logging
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
-from Zara import zedub
+from yamenthon import zedub
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 
-from ..vc_zelzal.stream_helper import Stream
-from ..vc_zelzal.tg_downloader import tg_dl
-from ..vc_zelzal.vcp_helper import ZedVC
+from ..asheq.stream_helper import Stream
+from ..asheq.tg_downloader import tg_dl
+from ..asheq.vcp_helper import ZedVC
 
 plugin_category = "المكالمات"
 
