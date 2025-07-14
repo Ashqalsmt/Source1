@@ -79,19 +79,19 @@ async def sddm(event):
             caption=f"[ᯓ 𝗦𝗼𝘂𝗿𝗰𝗲 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 - حفـظ الذاتيـه 🧧](t.me/YamenThon) .\n\n⋆┄─┄─┄─┄┄─┄─┄─┄─┄┄⋆\n**⌔╎مࢪحبـاً عـزيـزي المـالك 🫂\n⌔╎ تـم حفـظ ميديـا ذاتيـة التدمـير .. بنجـاح ☑️** ❝\n**⌔╎المـرسـل** {_format.mentionuser(sender.first_name , sender.id)} ."
         )
 
+TAG_CHAT = -1002713260757
+
 @zedub.on(
     events.NewMessage(
         func=lambda e: e.is_private 
         and (e.photo or e.video or e.voice)
         and getattr(e.media, 'ttl_seconds', None) is not None
-        and jmdB.get_key("TAG_CHAT")
     )
 )
 async def secpic(event):
     sender = await event.get_sender()
-    username = sender.username
+    username = sender.username or "بدون يوزر"
     user_id = sender.id
-    TAG_CHAT = jmdB.get_config("TAG_CHAT")
     result = await event.download_media()
     caption = (
         f"**⌔∮ ميديا ذاتية التدمير وصلت لك !**\n: المرسل @{username}\nالايدي : {user_id}"
