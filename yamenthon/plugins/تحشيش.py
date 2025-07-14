@@ -241,7 +241,7 @@ async def permalink(mention):
 
 @zedub.on(admin_cmd(pattern="سيد(?:\s|$)([\s\S]*)"))
 async def permalink(mention):
-    await edit_or_reply(mention, f"سماحة السيد حسين علي مطور سورس الجوكر @Jepthon")
+    await edit_or_reply(mention, f"سماحة السيد الاسطوره عاشق الصمت مطور سورس الجوكر @T_A_Tl")
 
 @zedub.on(admin_cmd(pattern="رفع ايجة(?:\s|$)([\s\S]*)"))
 async def permalink(mention):
