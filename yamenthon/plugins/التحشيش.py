@@ -59,39 +59,6 @@ async def permalink(mention):
     )
 
 
-@zedub.zed_cmd(pattern=r"رفع(?:\s|$)([\s\S]*)")
-async def permalink(mention):
-    user, custom = await get_user_from_event(mention)
-    if not user:
-        return
-
-    ignored_titles = [
-    "مطور", "المطور", "مالك", "المالك", "مشرف", "ورع", "ادمن", "جلب", "مرتي", "تاج", "بكلبي",
-    "قرد", "مطي", "زوجي", "زاحف", "فرخ", "حاته", "هايشة", "صاك", "ايجة", "كواد", "بقلبي",
-    "مميز", "منشئ", "وصخ", "زواج", "حمار", "مزه", "خروف", "حيوان", "بزون", "زباله", "مدير",
-    "مرتبط", "مرتبطه", "حبيبي", "خطيبتي", "صاكه", "حات", "جريذي", "قلبي", "بكلبي"
-    ]
-    title = custom.strip() if custom else "حبي"
-    if title.lower() in ignored_titles:
-        return
-
-    if user.id == 5571722913:
-        return await edit_or_reply(mention, "**- لكك دي هذا المطور يا تعبان 😂**")
-
-    # تجهيز البيانات والرد
-    jepthon = user.first_name.replace("\u2060", "") if user.first_name else user.username
-    me = await mention.client.get_me()
-    my_mention = f"[{me.first_name}](tg://user?id={me.id})"
-
-    await edit_or_reply(
-        mention,
-        f"**᯽︙ المستخدم** [{jepthon}](tg://user?id={user.id})\n"
-        f"**᯽︙  تم رفعه {title} بواسطة :** {my_mention}\n"
-        f"**᯽︙  تم رفع المستخدم بنجاح 🙂**"
-    )
-
-
-
 @zedub.zed_cmd(pattern="رفع مرتي(?: |$)(.*)")
 async def permalink(mention):
     user, custom = await get_user_from_event(mention)
