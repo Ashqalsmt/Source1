@@ -80,3 +80,5 @@ youtube_dl
 yt-dlp==2024.4.9
 img2html
 googletrans-py
+ntgcalls==0.2.0
+pytgcalls==3.0.0.dev24
