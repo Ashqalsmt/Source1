@@ -149,7 +149,7 @@ async def inline_handler(event):
         ]
         markup = event.client.build_reply_markup(buttons)
         photo = types.InputWebDocument(
-            url="https://te.legra.ph/file/ed1f3963fdad497ef72b4.jpg",  # شعار ثابت
+            url="https://i.postimg.cc/HsBGV28T/image.jp",  # شعار ثابت
             size=0,
             mime_type="image/jpeg",
             attributes=[],
