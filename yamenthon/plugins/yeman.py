@@ -12,7 +12,7 @@ from telethon import Button, types, events
 from telethon.errors import QueryIdInvalidError
 from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
-from pytube import YouTube  # مكتبة التحميل من اليوتيوب
+import yt_dlp  # ✅ مكتبة التحميل الجديدة
 
 from yamenthon import zedub
 from ..Config import Config
@@ -149,7 +149,7 @@ async def inline_handler(event):
         ]
         markup = event.client.build_reply_markup(buttons)
         photo = types.InputWebDocument(
-            url="https://i.postimg.cc/HsBGV28T/image.jpg",  # شعار ثابت
+            url="https://i.postimg.cc/HsBGV28T/image.jpg",
             size=0,
             mime_type="image/jpeg",
             attributes=[],
@@ -172,6 +172,18 @@ async def inline_handler(event):
         await event.answer([result] if result else None)
 
 
+# ✅ وظيفة تحميل الفيديو باستخدام yt_dlp
+def download_with_ytdlp(video_url, output_path):
+    ydl_opts = {
+        'outtmpl': output_path,
+        'format': 'mp4[height<=360]',
+        'quiet': True,
+        'noplaylist': True,
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([video_url])
+
+
 @zedub.tgbot.on(events.CallbackQuery(pattern=b"ytdl_download_(.*)"))
 async def ytdl_download_callback(event):
     try:
@@ -179,23 +191,19 @@ async def ytdl_download_callback(event):
 
         data = event.data.decode("utf-8")
         video_id = data.split("_")[2]
-        url = f"https://youtu.be/{video_id}"
+        url = f"https://www.youtube.com/watch?v={video_id}"
 
-        yt = YouTube(url)
+        file_name = f"{uuid4()}.mp4"
+        video_path = os.path.join(DOWNLOAD_DIR, file_name)
 
-        # 🔽 اختيار جودة أقل لتفادي الحجم الكبير
-        stream = yt.streams.filter(progressive=True, file_extension="mp4", res="360p").first()
+        download_with_ytdlp(url, video_path)
 
-        if not stream:
-            return await event.edit("❌ لم أتمكن من العثور على فيديو بجودة مناسبة.")
+        # 🔍 تحقق من حجم الملف لتفادي أخطاء البوت
+        if os.path.getsize(video_path) > 49 * 1024 * 1024:
+            os.remove(video_path)
+            return await event.edit("❌ الفيديو أكبر من 50MB ولا يمكن للبوت إرساله.")
 
-        # 🔍 التحقق من الحجم
-        if stream.filesize > 49 * 1024 * 1024:
-            return await event.edit("❌ الفيديو أكبر من 50MB ولا يمكن إرساله عبر البوت.")
-
-        video_path = stream.download(output_path=DOWNLOAD_DIR)
-
-        caption = f"🎬 **{yt.title}**\n📺 قناة: {yt.author}\n⏱️ المدة: {yt.length//60} دقيقة"
+        caption = f"📹 تم التحميـل من YouTube\n🔗 `{url}`"
 
         await event.client.send_file(event.chat_id, file=video_path, caption=caption)
 
