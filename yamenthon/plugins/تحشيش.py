@@ -11,7 +11,7 @@ from ..Config import Config
 from ..core.managers import edit_or_reply, edit_delete
 from ..helpers import reply_id, get_user_from_event
 from . import SUDO_LIST, edit_delete, edit_or_reply, reply_id, BOTLOG, BOTLOG_CHATID, HEROKU_APP, mention
-from . import BOTLOG, BOTLOG_CHATID
+
 plugin_category = "الادوات"
 LOGS = logging.getLogger(__name__)
 
