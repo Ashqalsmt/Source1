@@ -197,7 +197,7 @@ async def ytdl_download_callback(event):
 
         caption = f"🎬 **{yt.title}**\n📺 قناة: {yt.author}\n⏱️ المدة: {yt.length//60} دقيقة"
 
-        await event.respond(file=video_path, caption=caption)
+        await event.client.send_file(event.chat_id, file=video_path, caption=caption)
 
         await asyncio.sleep(5)
         os.remove(video_path)
