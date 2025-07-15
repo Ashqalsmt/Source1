@@ -82,4 +82,5 @@ img2html
 googletrans-py
 ntgcalls
 pytube
+yt_dlp
 
