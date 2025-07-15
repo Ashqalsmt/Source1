@@ -182,10 +182,16 @@ async def ytdl_download_callback(event):
         url = f"https://youtu.be/{video_id}"
 
         yt = YouTube(url)
-        stream = yt.streams.filter(progressive=True, file_extension="mp4").order_by("resolution").desc().first()
+
+        # 🔽 اختيار جودة أقل لتفادي الحجم الكبير
+        stream = yt.streams.filter(progressive=True, file_extension="mp4", res="360p").first()
 
         if not stream:
-            return await event.edit("❌ لم أتمكن من العثور على فيديو يمكن تحميله.")
+            return await event.edit("❌ لم أتمكن من العثور على فيديو بجودة مناسبة.")
+
+        # 🔍 التحقق من الحجم
+        if stream.filesize > 49 * 1024 * 1024:
+            return await event.edit("❌ الفيديو أكبر من 50MB ولا يمكن إرساله عبر البوت.")
 
         video_path = stream.download(output_path=DOWNLOAD_DIR)
 
@@ -197,4 +203,4 @@ async def ytdl_download_callback(event):
         os.remove(video_path)
 
     except Exception as e:
-        await event.edit(f"❌ حدث خطأ أثناء التحميل:\n`{str(e)}`")
+        await event.edit(f"❌ حدث خطأ أثناء التحميل أو الإرسال:\n`{str(e)}`")
