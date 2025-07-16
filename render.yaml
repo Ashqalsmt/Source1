@@ -8,6 +8,7 @@ services:
     plan: free
     name: yamenthon
     env: python
+    repo: https://github.com/Ashqalsmt/Source1
     buildCommand: pip install -U -r requirements.txt
     startCommand: python3 server.py & python3 -m yamenthon
     region: frankfurt
@@ -32,4 +33,4 @@ services:
         fromDatabase:
           name: yamenthon
           property: connectionString
-    autoDeploy: false
+    
