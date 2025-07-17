@@ -179,6 +179,7 @@ def download_with_ytdlp(video_url, output_path):
         'format': 'mp4[height<=360]',
         'quiet': True,
         'noplaylist': True,
+        'cookiefile': 'cookies.txt',  
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([video_url])
