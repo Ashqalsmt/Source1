@@ -70,21 +70,20 @@ async def permalink(mention):
     user, custom = await get_user_from_event(mention)
     if not user:
         return
-if user.id in zel_dev:
+    if user.id in zel_dev:
         return await edit_or_reply(mention, f"**╮ ❐ لك دي . . هـذا احـد المطـورين المساعديـن  ❏╰**")
     if user.id == 5571722913:
         return await edit_or_reply(mention, f"**╮ ❐ لك دي . . هـذا مطـور السـورس  ❏╰**")
     tag = user.first_name.replace("\u2060", "") if user.first_name else user.username
     await edit_or_reply(
         mention,
-        f"᯽︙ المستخدم [{jepthon}](tg://user?id={user.id}) \n**᯽︙  تـم رفعـه تاج بواسطة :** {my_mention} 👑🔥")
-
+        f"᯽︙ المستخدم [{tag}](tg://user?id={user.id}) \n**᯽︙  تـم رفعـه تاج بواسطة :** {my_mention} 👑🔥")
 @zedub.zed_cmd(pattern="رفع قرد(?: |$)(.*)")
 async def permalink(mention):
     user, custom = await get_user_from_event(mention)
     if not user:
         return
-if user.id in zel_dev:
+    if user.id in zel_dev:
         return await edit_or_reply(mention, f"**╮ ❐ لك دي . . هـذا احـد المطـورين المساعديـن  ❏╰**")
     if user.id == 5571722913:
         return await edit_or_reply(mention, f"**╮ ❐ لك دي . . هـذا مطـور السـورس  ❏╰**")
