@@ -76,7 +76,7 @@ async def inline_handler(event):
                     buttons = [
                         Button.inline(f"1 / {len(outdata)}", data=f"ytdl_next_{key_}_1"),
                         Button.inline("القائمـة 📜", data=f"ytdl_listall_{key_}_1"),
-                        Button.inline("⬇️  تحميـل", data=f'ytdl_download_{outdata[1]["video_id"]}_0'),
+                        Button.inline("⬇️  تحميـل", data=f'ytdl_download_{outdata[0]["video_id"]}_0'),
                     ]
                     caption = outdata[1]["message"]
                     photo = await get_ytthumb(outdata[1]["video_id"])
