@@ -8,8 +8,10 @@ plugin_category = "البوت"
 
 @zedub.on(events.NewMessage(pattern='.انطق (.*)'))
 async def speak_word(event):
+    if event.sender_id != (await event.client.get_me()).id:
+        return  
     text_to_speak = event.pattern_match.group(1)
-    language = 'ar'  # اللغة الافتراضية، يمكنك تعديلها حسب الحاجة
+    language = 'ar'  
 
     await event.reply(f"🗣️ جاري نطق: **{text_to_speak}**...")
 
