@@ -262,7 +262,7 @@ async def zed(mention):
         mention,
         f"**᯽︙ المستخدم** [{zedth2}](tg://user?id={user.id}) \n**᯽︙  تـم رفعـه صاك 🤤 بواسطة :** {my_mention} \n**᯽︙  تعال يلحلو انطيني بوسة من رگبتك 😻🤤**")
 
-@zq_lo.rep_cmd(
+@zedub.zed_cmd(
     pattern="مصه(?:\s|$)([\s\S]*)",
     command=("مصه", plugin_category),
 )
