@@ -35,10 +35,17 @@ async def amireallyalive(event):
     end = datetime.now()
     ms = (end - start).microseconds / 1000
     _, check_sgnirts = check_data_base_heal_th()
+
     Z_EMOJI = gvarstatus("ALIVE_EMOJI") or "❈┊"
-    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "〆ᴅᴇᴠᴇʟᴏᴘᴇʀ ᴀsʜᴇǫ ᴀʟsᴀᴍᴛ〆"
+    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "**〆ᴅᴇᴠᴇʟᴏᴘᴇʀ ᴀsʜᴇǫ ᴀʟsᴀᴍᴛ〆**"
     ZED_IMG = gvarstatus("ALIVE_PIC")
     zed_caption = gvarstatus("ALIVE_TEMPLATE") or zed_temp
+
+    # ✅ : اسم ثابت من قاعدة البيانات وربطه بمعرف المالك
+    USERID = zedub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
+    ALIVE_NAME = gvarstatus("ALIVE_NAME") or "-"
+    mention = f"[{ALIVE_NAME}](tg://user?id={USERID})"
+
     caption = zed_caption.format(
         ALIVE_TEXT=ALIVE_TEXT,
         Z_EMOJI=Z_EMOJI,
@@ -50,6 +57,7 @@ async def amireallyalive(event):
         dbhealth=check_sgnirts,
         ping=ms,
     )
+
     if ZED_IMG:
         ZED = [x for x in ZED_IMG.split()]
         PIC = random.choice(ZED)
@@ -61,7 +69,7 @@ async def amireallyalive(event):
         except (WebpageMediaEmptyError, MediaEmptyError, WebpageCurlFailedError):
             return await edit_or_reply(
                 zedevent,
-                f"**⌔∮ عـذراً عليـك الـرد ع صـوره او ميـديـا  ⪼  `.اضف صورة الفحص` <بالرد ع الصـوره او الميـديـا> ",
+                f"**⌔∮ عـذراً عليـك الـرد ع صـوره او ميـديـا  ⪼  `.اضف صورة الفحص` <بالرد ع الصـوره او الميـديـا> **",
             )
     else:
         await edit_or_reply(
