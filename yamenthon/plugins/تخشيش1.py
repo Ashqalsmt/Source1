@@ -25,7 +25,7 @@ async def ge(user, event):
         return None
     return user_obj
 
-zel_dev = (6669024587)
+zel_dev = (6669024587,)
 
 
 import random
@@ -276,7 +276,7 @@ async def permalink(mention):
         return await edit_or_reply(mention, f"**╮ ❐ لك دي . . بلا مفتاله حقك هاذا مطور السورس يا مجنون😒  ❏╰**")
     if user.id == 5571722913:
         return await edit_or_reply(mention, f"**╮ ❐ لك دي . . بلا مفتاله حقك هاذا مطور السورس يا مجنون😒  ❏╰**")
-    tag = user.first_name.replace("\u2060", "") if user.first_name else user.username
+    zedth2 = user.first_name.replace("\u2060", "") if user.first_name else user.username
     await edit_or_reply(mention, f"** ⣠⡶⠚⠛⠲⢄⡀\n⣼⠁      ⠀⠀⠀⠳⢤⣄\n⢿⠀⢧⡀⠀⠀⠀⠀⠀⢈⡇\n⠈⠳⣼⡙⠒⠶⠶⠖⠚⠉⠳⣄\n⠀⠀⠈⣇⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄\n⠀⠀⠀⠘⣆       ⠀⠀⠀⠀⠀⠈⠓⢦⣀\n⠀⠀⠀⠀⠈⢳⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠲⢤\n⠀⠀⠀⠀⠀⠀⠙⢦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧\n⠀⠀⠀⠀⠀⠀⠀    ⠓⠦⠀⠀⠀⠀**\n**🚹 ¦ تعال مصه عزيزي ** [{zedth2}](tg://user?id={user.id})")
 
 @zedub.zed_cmd(pattern="سيد(?: |$)(.*)")
