@@ -6,7 +6,7 @@ from telethon import functions
 from .Config import Config
 from .core.logger import logging
 from .core.session import zedub
-from .utils import autoname
+from .utils import mybot, saves, autoname
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
 from .utils import add_bot_to_logger_group, load_plugins, setup_bot, startupmessage, verifyLoggerGroup
 
