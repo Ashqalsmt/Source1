@@ -1259,37 +1259,37 @@ async def variable(event):
             await rep.edit("**「❖╎تم اضـافـة المنطقـه الزمنيـه .. بنجـاح ☑️**\n**「❖╎المضـاف اليـه : ↶**\n دولـة `{}`  \n**「❖╎يتم الان اعـادة تشغيـل بـوت يـــمنثون يستغـرق الامر 2-1 دقيقـه ▬▭ ...**".format(input_str))
         addgvar("TZ", "Europe/Berlin")
 
-@zedub.zed_cmd(pattern="اضف صورة (الحماية|الحمايه|الفحص|الوقتي|البوت|الكتم) ?(.*)")
-async def _(tiba):
-    if tiba.fwd_from:
+@zedub.zed_cmd(pattern="اضف صورة (الحماية|الحمايه|الفحص|الوقتي|البوت|الاوامر) ?(.*)")
+async def _(malatha):
+    if malatha.fwd_from:
         return
-    rep = await edit_or_reply(tiba, "**「❖╎جـاري اضـافة فـار الصـورة الـى بـوتك ...**")
+    zed = await edit_or_reply(malatha, "**「❖╎جـاري اضـافة فـار الصـورة الـى بـوتك ...**")
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
         #     if BOTLOG:
-        await tiba.client.send_message(
+        await malatha.client.send_message(
             BOTLOG_CHATID,
             "**「❖╎تم إنشاء حساب Telegraph جديد {} للدورة الحالية‌‌** \n**「❖╎لا تعطي عنوان url هذا لأي شخص**".format(
                 auth_url
             ),
         )
-    optional_title = tiba.pattern_match.group(2)
-    if tiba.reply_to_msg_id:
+    optional_title = malatha.pattern_match.group(2)
+    if malatha.reply_to_msg_id:
         start = datetime.now()
-        r_message = await tiba.get_reply_message()
-        input_str = tiba.pattern_match.group(1)
+        r_message = await malatha.get_reply_message()
+        input_str = malatha.pattern_match.group(1)
         if input_str in ["الحماية", "الحمايه"]:
-            downloaded_file_name = await tiba.client.download_media(
+            downloaded_file_name = await malatha.client.download_media(
                 r_message, Config.TEMP_DIR
             )
-            await rep.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
+            await zed.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await rep.edit("**「❖╎خطا : **" + str(exc))
+                await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -1297,19 +1297,19 @@ async def _(tiba):
                 os.remove(downloaded_file_name)
                 vinfo = ("https://graph.org{}".format(media_urls[0]))
                 addgvar("pmpermit_pic", vinfo)
-                await rep.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
+                await zed.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
         elif input_str in ["الفحص", "السورس"]:
-            downloaded_file_name = await tiba.client.download_media(
+            downloaded_file_name = await malatha.client.download_media(
                 r_message, Config.TEMP_DIR
             )
-            await rep.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
+            await zed.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await rep.edit("**「❖╎خطا : **" + str(exc))
+                await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -1317,19 +1317,19 @@ async def _(tiba):
                 os.remove(downloaded_file_name)
                 vinfo = ("https://graph.org{}".format(media_urls[0]))
                 addgvar("ALIVE_PIC", vinfo)
-                await rep.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
+                await zed.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
         elif input_str in ["البوت", "الستارت"]:
-            downloaded_file_name = await tiba.client.download_media(
+            downloaded_file_name = await malatha.client.download_media(
                 r_message, Config.TEMP_DIR
             )
-            await rep.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
+            await zed.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await rep.edit("**「❖╎خطا : **" + str(exc))
+                await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -1337,19 +1337,19 @@ async def _(tiba):
                 os.remove(downloaded_file_name)
                 vinfo = ("https://graph.org{}".format(media_urls[0]))
                 addgvar("BOT_START_PIC", vinfo)
-                await rep.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
+                await zed.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
         elif input_str in ["الاوامر", "اللوحه"]:
-            downloaded_file_name = await tiba.client.download_media(
+            downloaded_file_name = await malatha.client.download_media(
                 r_message, Config.TEMP_DIR
             )
-            await rep.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
+            await zed.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await rep.edit("**「❖╎خطا : **" + str(exc))
+                await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -1357,19 +1357,19 @@ async def _(tiba):
                 os.remove(downloaded_file_name)
                 vinfo = ("https://graph.org{}".format(media_urls[0]))
                 addgvar("CMD_PIC", vinfo)
-                await rep.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
+                await zed.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
         elif input_str in ["السورس", "سورس"]:
-            downloaded_file_name = await tiba.client.download_media(
+            downloaded_file_name = await malatha.client.download_media(
                 r_message, Config.TEMP_DIR
             )
-            await rep.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
+            await zed.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await rep.edit("**「❖╎خطا : **" + str(exc))
+                await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -1377,19 +1377,19 @@ async def _(tiba):
                 os.remove(downloaded_file_name)
                 vinfo = ("https://graph.org{}".format(media_urls[0]))
                 addgvar("ALIVE_PIC", vinfo)
-                await rep.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
+                await zed.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
         elif input_str in ["الكتم", "كتم"]:
-            downloaded_file_name = await tiba.client.download_media(
+            downloaded_file_name = await malatha.client.download_media(
                 r_message, Config.TEMP_DIR
             )
-            await rep.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
+            await zed.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await rep.edit("**「❖╎خطا : **" + str(exc))
+                await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -1397,19 +1397,19 @@ async def _(tiba):
                 os.remove(downloaded_file_name)
                 vinfo = ("https://graph.org{}".format(media_urls[0]))
                 addgvar("KTM_PIC", vinfo)
-                await rep.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
+                await zed.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
         elif input_str in ["الوقتي", "البروفايل"]:
-            downloaded_file_name = await tiba.client.download_media(
+            downloaded_file_name = await malatha.client.download_media(
                 r_message, Config.TEMP_DIR
             )
-            await rep.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
+            await zed.edit(f"** ⪼ تم تحميل** {downloaded_file_name} **.. بنجـاح ✓**")
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await rep.edit("**「❖╎خطا : **" + str(exc))
+                await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -1417,13 +1417,14 @@ async def _(tiba):
                 os.remove(downloaded_file_name)
                 vinfo = ("https://graph.org{}".format(media_urls[0]))
                 addgvar("DIGITAL_PIC", vinfo)
-                await rep.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
+                await zed.edit("**「❖╎تم تغييـر صـورة {} .. بنجـاح ☑️**\n**「❖╎المتغيـر : ↶**\n `{}` \n\n**「❖╎قنـاة السـورس : @YamenThon**".format(input_str, vinfo))
 
 
     else:
-        await rep.edit(
+        await zed.edit(
             "**「❖╎بالـرد ع صـورة لتعييـن الفـار ...**",
-        )
+            )
+                
 
 
 def resize_image(image):
