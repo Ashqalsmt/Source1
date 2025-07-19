@@ -14,5 +14,5 @@ async def set_alive_name(event):
     else:
         return await edit_or_reply(event, "**✘ يجب كتابة الاسم أو الرد على رسالة تحتوي على الاسم.**")
 
-     addgvar("ALIVE_NAME", name)
+    addgvar("ALIVE_NAME", name)
     await edit_or_reply(event, f"**✓ تم تعيين الاسم بنجاح إلى :** `{name}`")
