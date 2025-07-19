@@ -2,7 +2,7 @@ from ..sql_helper.globals import addgvar
 from ..core.managers import edit_or_reply
 from yamenthon import zedub
 
-@zedub.zed_cmd(pattern="تعيين اسمي(?: (.*))?$")
+@zedub.zed_cmd(pattern="تغيير اسمي(?: (.*))?$")
 async def set_alive_name(event):
     input_name = event.pattern_match.group(1)
     reply = await event.get_reply_message()
