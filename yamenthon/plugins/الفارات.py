@@ -1287,7 +1287,7 @@ async def _(malatha):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
-                media_urls = upload_file(downloaded_file_name)
+                media_urls = await upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
                 await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
@@ -1307,7 +1307,7 @@ async def _(malatha):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
-                media_urls = upload_file(downloaded_file_name)
+                
             except exceptions.TelegraphException as exc:
                 await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
@@ -1327,7 +1327,7 @@ async def _(malatha):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
-                media_urls = upload_file(downloaded_file_name)
+                media_urls = await upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
                 await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
@@ -1347,7 +1347,7 @@ async def _(malatha):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
-                media_urls = upload_file(downloaded_file_name)
+                media_urls = await upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
                 await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
@@ -1367,7 +1367,7 @@ async def _(malatha):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
-                media_urls = upload_file(downloaded_file_name)
+                media_urls = await upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
                 await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
@@ -1387,7 +1387,7 @@ async def _(malatha):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
-                media_urls = upload_file(downloaded_file_name)
+                media_urls = await upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
                 await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
@@ -1407,7 +1407,7 @@ async def _(malatha):
                 resize_image(downloaded_file_name)
             try:
                 start = datetime.now()
-                media_urls = upload_file(downloaded_file_name)
+                media_urls = await upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
                 await zed.edit("**「❖╎خطا : **" + str(exc))
                 os.remove(downloaded_file_name)
@@ -1423,8 +1423,7 @@ async def _(malatha):
     else:
         await zed.edit(
             "**「❖╎بالـرد ع صـورة لتعييـن الفـار ...**",
-            )
-                
+        )
 
 
 def resize_image(image):
