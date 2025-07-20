@@ -71,11 +71,6 @@ async def kickme(leave):
     await leave.edit("**「❖╎جـاري مـغادرة المجـموعة مـع السـلامة  🚶‍♂️  ..**")
     await leave.client.kick_participant(leave.chat_id, "me")
 
-@zedub.zed_cmd(pattern=r"مغادره(.*)")
-async def banme(leave):
-    await leave.edit("**「❖╎جـاري مـغادرة المجـموعة مـع السـلامة  🚶‍♂️  ..**")
-    await leave.client.kick_participant(leave.chat_id, "me")
-
 @zedub.zed_cmd(pattern="بوتي$")
 async def _(event):
     TG_BOT_USERNAME = Config.TG_BOT_USERNAME
