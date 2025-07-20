@@ -1,8 +1,11 @@
 from telethon.tl.types import Channel, Chat, ChannelParticipantCreator, ChannelParticipantAdmin
-from telethon.tl.functions.channels import GetParticipantRequest
-from telethon.tl.functions.channels import LeaveChannelRequest
+from telethon.tl.functions.channels import GetParticipantRequest, LeaveChannelRequest
 from ..core.managers import edit_or_reply
 from .. import zedub
+
+# الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
+SOURCE_CHANNEL_ID = 2552895400
+SOURCE_GROUP_ID = -1002220862939
 
 @zedub.zed_cmd(pattern="مغادره القنوات$")
 async def leave_channels(event):
@@ -12,10 +15,12 @@ async def leave_channels(event):
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if isinstance(entity, Channel) and not entity.megagroup:
+            if entity.id == SOURCE_CHANNEL_ID:
+                continue  # الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
             try:
                 participant = await event.client(GetParticipantRequest(entity.id, me.id))
                 if isinstance(participant.participant, (ChannelParticipantCreator, ChannelParticipantAdmin)):
-                    continue  # تخطى القناة إن كنت مالك أو مشرف
+                    continue
                 await event.client(LeaveChannelRequest(entity.id))
                 count += 1
             except Exception:
@@ -30,10 +35,12 @@ async def leave_groups(event):
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if (isinstance(entity, Channel) and entity.megagroup) or isinstance(entity, Chat):
+            if entity.id == SOURCE_GROUP_ID:
+                continue  # الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
             try:
                 participant = await event.client(GetParticipantRequest(entity.id, me.id))
                 if isinstance(participant.participant, (ChannelParticipantCreator, ChannelParticipantAdmin)):
-                    continue  # لا تغادر إن كنت المالك أو مشرف
+                    continue
                 await event.client(LeaveChannelRequest(entity.id))
                 count += 1
             except Exception:
