@@ -5,7 +5,7 @@ from .. import zedub
 
 # الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
 SOURCE_CHANNEL_ID = 2552895400
-SOURCE_GROUP_ID = -1002220862939
+SOURCE_GROUP_ID = 2220862939
 
 @zedub.zed_cmd(pattern="مغادره القنوات$")
 async def leave_channels(event):
@@ -35,7 +35,7 @@ async def leave_groups(event):
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if (isinstance(entity, Channel) and entity.megagroup) or isinstance(entity, Chat):
-            if abs(entity.id) == abs(SOURCE_GROUP_ID):
+            if entity.id == SOURCE_GROUP_ID:
                 continue  # الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
             try:
                 participant = await event.client(GetParticipantRequest(entity.id, me.id))
