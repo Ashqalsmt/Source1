@@ -4,7 +4,7 @@ from telethon.tl.functions.channels import LeaveChannelRequest
 from ..core.managers import edit_or_reply
 from .. import zedub
 
-@zedub.zed_cmd(pattern="غادر القنوات$")
+@zedub.zed_cmd(pattern="مغادره القنوات$")
 async def leave_channels(event):
     reply = await edit_or_reply(event, "✧ جارٍ مغادرة القنوات التي لا تملكها أو تديرها ...")
     count = 0
@@ -22,7 +22,7 @@ async def leave_channels(event):
                 continue
     await reply.edit(f"**✧ تم مغادرة `{count}` قناة (غير التي تملكها أو تديرها)** ✅")
 
-@zedub.zed_cmd(pattern="غادر المجموعات$")
+@zedub.zed_cmd(pattern="مغادره المجموعات$")
 async def leave_groups(event):
     reply = await edit_or_reply(event, "**✧ جارٍ مغادرة المجموعات التي لا تملكها أو تديرها ...**")
     count = 0
