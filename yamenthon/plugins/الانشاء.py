@@ -73,8 +73,9 @@ async def _(event):
         except Exception as e:
             await edit_delete(event, f"**- خطـأ :**\n{e}")
     elif type_of_group == "خارق":
+        photo = await event.client.upload_file("yamen/default.jpg")
         answer = await create_supergroup(
-            group_name, event.client, Config.TG_BOT_USERNAME, descript
+            group_name, event.client, Config.TG_BOT_USERNAME, descript, photo
         )
         if answer[0] != "error":
             await edit_or_reply(
