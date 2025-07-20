@@ -35,7 +35,7 @@ async def leave_groups(event):
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if (isinstance(entity, Channel) and entity.megagroup) or isinstance(entity, Chat):
-            if entity.id == SOURCE_GROUP_ID:
+            if abs(entity.id) == abs(SOURCE_GROUP_ID):
                 continue  # الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
             try:
                 participant = await event.client(GetParticipantRequest(entity.id, me.id))
