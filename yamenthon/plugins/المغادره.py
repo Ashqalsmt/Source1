@@ -15,7 +15,7 @@ async def leave_channels(event):
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if isinstance(entity, Channel) and not entity.megagroup:
-            if entity.id == SOURCE_CHANNEL_ID:
+            if entity.id in SOURCE_CHANNEL_IDS:
                 continue  # الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
             try:
                 participant = await event.client(GetParticipantRequest(entity.id, me.id))
