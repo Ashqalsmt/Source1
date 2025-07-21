@@ -77,21 +77,25 @@ async def get_adzan(adzan):
     date_hijri = data["data"]["date"]["hijri"]["date"]
 
     msg = (
-        f"<b>🕋╎اوقـات الصـلاة بالتـوقيت المحلـي لعواصـم الـدول</b>\n\n"
-        f"<b>المـدينة     :</b> {city_ar}\n"
-        f"<b>الـدولة  :</b> {country_ar}\n"
-        f"<b>التـاريخ     :</b> {date_gregorian}\n"
-        f"<b>الهـجري    :</b> {date_hijri}\n\n"
-        f"<b>الامـساك    :</b> {timings['Imsak']}\n"
-        f"<b>شـروق الشمس  :</b> {timings['Sunrise']}\n"
-        f"<b>الـفجر     :</b> {timings['Fajr']}\n"
-        f"<b>الضـهر    :</b> {timings['Dhuhr']}\n"
-        f"<b>العـصر      :</b> {timings['Asr']}\n"
-        f"<b>غـروب الشمس   :</b> {timings['Sunset']}\n"
-        f"<b>المـغرب  :</b> {timings['Maghrib']}\n"
-        f"<b>العشـاء     :</b> {timings['Isha']}\n"
-        f"<b>منتـصف الليل :</b> {timings['Midnight']}\n\n"
-        f"ᯓ 𝗦𝗢𝗨𝗥𝗖𝗘 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉╎@YamenThon"
-    )
+    f"<b>🕋┊ أوقـات الصـلاة ┊♡┊</b>\n\n"
+    
+    f"<b>🌍╎ المـدينة     :</b> <code>{city_ar}</code>\n"
+    f"<b>🗺️╎ الـدولة      :</b> <code>{country_ar}</code>\n"
+    f"<b>📅╎ التـاريخ     :</b> <code>{date_gregorian}</code>\n"
+    f"<b>🌙╎ الهـجري      :</b> <code>{date_hijri}</code>\n\n"
+    
+    f"<b>⏳┊ مواقيـت الصـلاة ┊♡┊</b>\n"
+    f"<b>⏰╎ الامـساك     :</b> <code>{timings['Imsak']}</code>\n"
+    f"<b>🌄╎ شـروق الشمس  :</b> <code>{timings['Sunrise']}</code>\n"
+    f"<b>🕌╎ الـفجر       :</b> <code>{timings['Fajr']}</code>\n"
+    f"<b>☀️╎ الضـهر       :</b> <code>{timings['Dhuhr']}</code>\n"
+    f"<b>🌇╎ العـصر       :</b> <code>{timings['Asr']}</code>\n"
+    f"<b>🌅╎ غـروب الشمس  :</b> <code>{timings['Sunset']}</code>\n"
+    f"<b>🌘╎ المـغرب      :</b> <code>{timings['Maghrib']}</code>\n"
+    f"<b>🌃╎ العشـاء      :</b> <code>{timings['Isha']}</code>\n"
+    f"<b>⏳╎ منتـصف الليل  :</b> <code>{timings['Midnight']}</code>\n\n"
+    
+    f"<b>𓏺 𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉 | <a href='https://t.me/YamenThon'>@YamenThon</a></b>"
+)
 
     await edit_or_reply(adzan, msg, parse_mode="html")
