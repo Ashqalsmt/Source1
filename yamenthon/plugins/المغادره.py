@@ -4,7 +4,7 @@ from ..core.managers import edit_or_reply
 from .. import zedub
 
 # الملف كتابة الاسطوره عاشق الصمت بطل الخماط وذكر المصدر
-SOURCE_CHANNEL_ID = 2552895400
+SOURCE_CHANNEL_IDS = [2552895400, 2646404795, 2537524351, 2380606401, 1375367570]
 SOURCE_GROUP_ID = 2220862939
 
 @zedub.zed_cmd(pattern="مغادره القنوات$")
