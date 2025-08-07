@@ -11,11 +11,15 @@ import os
 from contextlib import suppress
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.events import NewMessage
+import aiohttp
 
 from yamenthon import zedub
 from ..core.managers import edit_or_reply
 
 plugin_category = "الادمن"
+
+API_URL = "https://restore-access.indream.app/regdate"
+API_KEY = "e758fb28-79be-4d1c-af6b-066633ded128"
 
 @zedub.zed_cmd(pattern="كشف المجموعة(?: |$)(.*)")
 async def info_group(event):
@@ -163,7 +167,7 @@ async def fetch_info(chat, event):
 @zedub.zed_cmd(pattern="ستوري(?: |$)(.*)")
 async def stories(event):
     replied = await event.get_reply_message()
-    reply = await edit_or_reply(event, "**⌔∮ جار تنزيل الستوري يرجى الانتظار 🧸♥️**")
+    reply = await edit_or_reply(event, "**⌔∮ جار تنزيل الستوري يرجى الانتظار �♥️**")
     try:
         username = event.pattern_match.group(1).strip()
     except:
@@ -199,3 +203,40 @@ async def stories(event):
         os.remove(file)
     
     await reply.edit("**⌔∮ تم بنجاح تحميل الستوري ✅**")
+
+@zedub.zed_cmd(pattern="الانشا(?:ء)?$")
+async def تاريخ_الانشاء(event):
+    if not event.is_reply:
+        return await edit_or_reply(event, "**⌔∮ يجب الرد على رسالة المستخدم لمعرفة تاريخ الإنشاء**")
+    
+    reply_msg = await event.get_reply_message()
+    user = await reply_msg.get_sender()
+
+    if not user or not user.id:
+        return await edit_or_reply(event, "❌ لا يمكن معرفة المستخدم.")
+
+    user_id = int(user.id)
+
+    reply = await edit_or_reply(event, "⏳ جارٍ التحقق من تاريخ الإنشاء...")
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "x-api-key": API_KEY,
+                "Content-Type": "application/json"
+            }
+            payload = {
+                "telegramId": user_id
+            }
+            async with session.post(API_URL, json=payload, headers=headers) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    date = result.get("data", {}).get("date")
+                    if date:
+                        await reply.edit(f"🗓️ تاريخ إنشاء الحساب:\n{date}")
+                    else:
+                        await reply.edit("❌ لا يمكن تحديد تاريخ الإنشاء من خلال الخدمة.")
+                else:
+                    await reply.edit(f"⚠️ فشل الاتصال بالخدمة. الكود: {resp.status}")
+    except Exception as e:
+        await reply.edit(f"❌ حدث خطأ أثناء جلب التاريخ:\n{e}")
