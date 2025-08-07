@@ -107,6 +107,25 @@ async def fetch_info(replied_user, event):
                         creation_date = date
     except Exception:
         pass
+
+    rmsg = await bot.get_messages(event.chat_id, 0, from_user=user_id) 
+    rrr = rmsg.total
+    if rrr < 100: 
+        baqr = "غير متفاعل  🗿"
+    elif rrr > 200 and rrr < 500:
+        baqr = "ضعيف  🗿"
+    elif rrr > 500 and rrr < 700:
+        baqr = "شد حيلك  🏇"
+    elif rrr > 700 and rrr < 1000:
+        baqr = "ماشي الحال  🏄🏻‍♂"
+    elif rrr > 1000 and rrr < 2000:
+        baqr = "ملك التفاعل  🎖"
+    elif rrr > 2000 and rrr < 3000:
+        baqr = "امبراطور التفاعل  🥇"
+    elif rrr > 3000 and rrr < 4000:
+        baqr = "غنبله  💣"
+    else:
+        baqr = "نار وشرر  🏆"
     first_name = (
         first_name.replace("\u2060", "")
         if first_name
@@ -137,6 +156,7 @@ caption += f"<b>𓃠 {ZEDM}الصـور    ⇾ </b> {replied_user_profile_photos
 if user_id != (await event.client.get_me()).id: 
     caption += f"<b>𓃠 {ZEDM}الـمجموعات المشتـركة ⇾ </b> {common_chat} 👥\n"
 caption += f"<b>𓃠 {ZEDM}تـاريخ الإنشـاء ⇾ </b> {creation_date} ⌛\n"
+caption += f"<b>𓃠{ZEDM}التفاعل   ⇠</b>  {baqr}\n" 
 caption += f"<b>𓃠 {ZEDM}البايـو     ⇾ </b> {user_bio} 📝\n"
 caption += f"ٴ<b>┗━━━━━━━━━━━━━━━━━┛</b>"
 return photo, caption
@@ -281,6 +301,7 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
 
 
