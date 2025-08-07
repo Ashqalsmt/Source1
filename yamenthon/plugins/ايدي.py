@@ -147,19 +147,19 @@ async def fetch_info(replied_user, event):
     # اجعل بناء caption داخل الدالة أيضًا
     caption = f"<b>✨ {ZED_TEXT} ✨</b>\n"
     caption += f"ٴ<b>┏━━━━━━━━━━━━━━━━━┓</b>\n"
-    caption += f"<b>𓃠 {ZEDM}الاسـم    ⇾ </b> "
+    caption += f"<b>𓃠 {ZEDM}الاسـم    ⇠ </b> "
     caption += f'<a href="tg://user?id={user_id}">{full_name}</a>\n'
-    caption += f"<b>𓃠 {ZEDM}المعـرف  ⇾ </b> {username}\n"
-    caption += f"<b>𓃠 {ZEDM}الايـدي   ⇾ </b> <code>{user_id}</code>\n"
-    caption += f"<b>𓃠 {ZEDM}الرتبـــه   ⇾ {rotbat} </b>\n"
+    caption += f"<b>𓃠 {ZEDM}المعـرف  ⇠ </b> {username}\n"
+    caption += f"<b>𓃠 {ZEDM}الايـدي   ⇠ </b> <code>{user_id}</code>\n"
+    caption += f"<b>𓃠 {ZEDM}الرتبـــه   ⇠ {rotbat} </b>\n"
     if resources == True or user_id in zelzal: 
-        caption += f"<b>𓃠 {ZEDM}الحسـاب ⇾  بـريميـوم 💎</b>\n"
-    caption += f"<b>𓃠 {ZEDM}الصـور    ⇾ </b> {replied_user_profile_photos_count} 🏞\n"
+        caption += f"<b>𓃠 {ZEDM}بـريميـوم ⇠  الحسـاب 💎</b>\n"
+    caption += f"<b>𓃠 {ZEDM}الصـور    ⇠ </b> {replied_user_profile_photos_count} 🏞\n"
     if user_id != (await event.client.get_me()).id: 
-        caption += f"<b>𓃠 {ZEDM}الـمجموعات المشتـركة ⇾ </b> {common_chat} 👥\n"
-    caption += f"<b>𓃠 {ZEDM}تـاريخ الإنشـاء ⇾ </b> {creation_date} ⌛\n"
+        caption += f"<b>𓃠 {ZEDM}الـمجموعات المشتـركة ⇠ </b> {common_chat} 👥\n"
+    caption += f"<b>𓃠 {ZEDM}تـاريخ الإنشـاء ⇠ </b> {creation_date} ⌛\n"
     caption += f"<b>𓃠{ZEDM}التفاعل   ⇠</b>  {baqr}\n" 
-    caption += f"<b>𓃠 {ZEDM}البايـو     ⇾ </b> {user_bio} 📝\n"
+    caption += f"<b>𓃠 {ZEDM}البايـو     ⇠ </b> {user_bio} 📝\n"
     caption += f"ٴ<b>┗━━━━━━━━━━━━━━━━━┛</b>"
 
     return photo, caption
@@ -304,6 +304,7 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
 
 
