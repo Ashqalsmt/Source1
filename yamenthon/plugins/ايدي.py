@@ -143,7 +143,7 @@ async def fetch_info(replied_user, event):
         rotbat = "⌁ مـالك الحساب 𓀫 ⌁" 
     else:
         rotbat = "⌁ العضـو 𓅫 ⌁"
-    caption = f"<b>✨ {ZED_TEXT} ✨</b>\n"
+caption = f"<b>✨ {ZED_TEXT} ✨</b>\n"
 caption += f"ٴ<b>┏━━━━━━━━━━━━━━━━━┓</b>\n"
 caption += f"<b>𓃠 {ZEDM}الاسـم    ⇾ </b> "
 caption += f'<a href="tg://user?id={user_id}">{full_name}</a>\n'
@@ -301,6 +301,7 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
 
 
