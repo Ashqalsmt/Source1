@@ -28,8 +28,7 @@ LOGS = logging.getLogger(__name__)
 
 ZED_TEXT = gvarstatus("CUSTOM_ALIVE_TEXT") or "•⎚• مـعلومـات المسـتخـدم مـن سورس يـــمنثون"
 ZEDM = gvarstatus("CUSTOM_ALIVE_EMOJI") or "✦ "
-ZEDF = gvarstatus("CUSTOM_ALIVE_FONT") or "┏━━━━━━━ يـــمنثون ━━━━━━━┓"
-ZEDY = gvarstatus("CUSTOM_ALIVE_FONT") or "┗━━━━━━━ يـــمنثون ━━━━━━━┛"
+ZEDF = gvarstatus("CUSTOM_ALIVE_FONT") or "⋆─┄─┄─┄─ يـــمنثون ─┄─┄─┄─⋆"
 zed_dev = ( 6669024587, 6669024587)
 zel_dev = (6669024587, 6669024587)
 zelzal = (5571722913, 5571722913)
@@ -146,27 +145,22 @@ async def fetch_info(replied_user, event):
         rotbat = "⌁ العضـو 𓅫 ⌁"
 
     # اجعل بناء caption داخل الدالة أيضًا
-    caption = f"<b>✨ {ZED_TEXT} ✨</b>\n"
+    caption = f"<b> {ZED_TEXT} </b>\n"
     caption += f"ٴ<b>{ZEDF}</b>\n"
-
-    caption += f"<b>𓃠 {full_name} ⇠ {ZEDM}الاسـم</b>\n"
-    caption += f"<b>𓃠 {username} ⇠ {ZEDM}المعـرف</b>\n"
-    caption += f"<b>𓃠 <code>{user_id}</code> ⇠ {ZEDM}الايـدي</b>\n"
-    caption += f"<b>𓃠 {rotbat} ⇠ {ZEDM}الرتبـــه</b>\n"
-
+    caption += f"<b>{ZEDM}الاسـم    ⇠ </b> "
+    caption += f'<a href="tg://user?id={user_id}">{full_name}</a>'
+    caption += f"\n<b>{ZEDM}المعـرف  ⇠  {username}</b>"
+    caption += f"\n<b>{ZEDM}الايـدي   ⇠ </b> <code>{user_id}</code>\n"
+    caption += f"<b>{ZEDM}الرتبـــه   ⇠ {rotbat} </b>\n"
     if resources == True or user_id in zelzal: 
-        caption += f"<b>𓃠 الحسـاب 💎 ⇠ {ZEDM}بـريميـوم</b>\n"
-
-    caption += f"<b>𓃠 {replied_user_profile_photos_count} 🏞 ⇠ {ZEDM}الصـور</b>\n"
-
+        caption += f"<b>{ZEDM}الحسـاب ⇠  بـريميـوم 🌟</b>\n"
+    caption += f"<b>{ZEDM}الصـور    ⇠ </b> {replied_user_profile_photos_count}🏞\n"
     if user_id != (await event.client.get_me()).id: 
-        caption += f"<b>𓃠 {common_chat} 👥 ⇠ {ZEDM}الـمجموعات المشتـركة</b>\n"
-
-    caption += f"<b>𓃠 {creation_date} ⌛ ⇠ {ZEDM}تـاريخ الإنشـاء</b>\n"
-    caption += f"<b>𓃠 {baqr} 🏇 ⇠ {ZEDM}التفاعل</b>\n"
-    caption += f"<b>𓃠 {user_bio} 📝 ⇠ {ZEDM}البايـو</b>\n"
-    caption += f"ٴ<b>{ZEDY}</b>"
-
+        caption += f"<b>{ZEDM}الـمجموعات المشتـركة ⇠ </b> {common_chat}🛰 \n"
+    caption += f"<b>{ZEDM}تـاريخ الإنشـاء     ⇠  {creation_date}📆</b> \n"
+    caption += f"<b>{REPM}التفاعل   ⇠</b>  {baqr}\n"
+    caption += f"<b>{ZEDM}البايـو     ⇠  {user_bio}</b> \n"
+    caption += f"ٴ<b>{ZEDF}</b>"
     return photo, caption
 
 
@@ -308,6 +302,7 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
 
 
