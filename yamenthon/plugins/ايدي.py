@@ -5,6 +5,7 @@ import contextlib
 import html
 import os
 import base64
+import aiohttp
 
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import MessageEntityMentionName
@@ -87,6 +88,25 @@ async def fetch_info(replied_user, event):
         Config.TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg",
         download_big=True,
     )
+    # جلب تاريخ إنشاء الحساب من API خارجي
+    creation_date = "❌ غير معـروف"
+    API_URL = "https://restore-access.indream.app/regdate"
+    API_KEY = "e758fb28-79be-4d1c-af6b-066633ded128"
+    try:
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "x-api-key": API_KEY,
+                "Content-Type": "application/json"
+            }
+            payload = {"telegramId": user_id}
+            async with session.post(API_URL, json=payload, headers=headers) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    date = result.get("data", {}).get("date")
+                    if date:
+                        creation_date = date
+    except Exception:
+        pass
     first_name = (
         first_name.replace("\u2060", "")
         if first_name
@@ -111,15 +131,16 @@ async def fetch_info(replied_user, event):
     caption += f"\n<b>{ZEDM}المعـرف  ⇠  {username}</b>"
     caption += f"\n<b>{ZEDM}الايـدي   ⇠ </b> <code>{user_id}</code>\n"
     caption += f"<b>{ZEDM}الرتبـــه   ⇠ {rotbat} </b>\n"
-    if resources == True or user_id in zelzal: # code by t.me/zzzzl1l
+    if resources == True or user_id in zelzal: 
         caption += f"<b>{ZEDM}الحسـاب ⇠  بـريميـوم 🌟</b>\n"
     caption += f"<b>{ZEDM}الصـور    ⇠ </b> {replied_user_profile_photos_count}\n"
-    if user_id != (await event.client.get_me()).id: # code by t.me/zzzzl1l
+    if user_id != (await event.client.get_me()).id: 
         caption += f"<b>{ZEDM}الـمجموعات المشتـركة ⇠ </b> {common_chat} \n"
+    caption += f"<b>{ZEDM}تـاريخ الإنشـاء ⇠ </b> {creation_date}\n"
     caption += f"<b>{ZEDM}البايـو     ⇠  {user_bio}</b> \n"
     caption += f"ٴ<b>{ZEDF}</b>"
     return photo, caption
-# Copyright (C) 2021 Zed-Thon . All Rights Reserved
+# 
 
 
 @zedub.zed_cmd(
@@ -260,4 +281,5 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
