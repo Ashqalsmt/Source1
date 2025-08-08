@@ -63,6 +63,7 @@ async def get_user_from_event(event):
 
 
 async def fetch_info(replied_user, event):
+    user = replied_user  # تعريف user بناءً على الباراميتر اللي وصل
     """Get details from the User object."""
     FullUser = (await event.client(GetFullUserRequest(replied_user.id))).full_user
     replied_user_profile_photos = await event.client(
@@ -304,6 +305,7 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
 
 
