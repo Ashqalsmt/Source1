@@ -158,6 +158,7 @@ async def fetch_info(replied_user, event):
     if user_id != (await event.client.get_me()).id: 
         caption += f"<b>{ZEDM}الـمجموعات المشتـركة ⇠ </b> {common_chat} 🛰 \n"
     caption += f"<b>{ZEDM}تـاريخ الإنشـاء     ⇠  {creation_date} 📆</b> \n"
+    caption += f"<b>{ZEDM}الرسائل   ⇠</b>  {rrr}  💌\n"
     caption += f"<b>{ZEDM}التفاعل   ⇠</b>  {baqr}\n"
     caption += f"<b>{ZEDM}البايـو     ⇠  {user_bio}</b> \n"
     caption += f"ٴ<b>{ZEDF}</b>"
@@ -302,6 +303,7 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
 
 
