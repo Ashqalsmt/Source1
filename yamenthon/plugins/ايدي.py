@@ -108,6 +108,8 @@ async def fetch_info(replied_user, event):
     except Exception:
         pass
 
+    is_premium = "بـريميـوم 🌟" if getattr(user, "premium", False) else "بـريميـوم ❎️"
+
     rmsg = await bot.get_messages(event.chat_id, 0, from_user=user_id) 
     rrr = rmsg.total
     if rrr < 100: 
@@ -303,6 +305,7 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
 
 
 
