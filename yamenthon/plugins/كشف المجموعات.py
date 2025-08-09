@@ -1,6 +1,7 @@
 from telethon import events
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.tl.functions.messages import GetHistoryRequest, GetFullChatRequest
+from telethon.tl.functions.stories import CanSendStoryRequest, SendStoryRequest
 from telethon.tl.types import MessageActionChannelMigrateFrom, ChannelParticipantsAdmins, User, UserFull
 from telethon.errors import ChannelInvalidError, ChannelPrivateError, ChannelPublicGroupNaError
 from telethon.utils import get_input_location
@@ -203,6 +204,40 @@ async def stories(event):
         os.remove(file)
     
     await reply.edit("**⌔∮ تم بنجاح تحميل الستوري ✅**")
+
+@zedub.zed_cmd(pattern="رفع ستوري$")
+async def upload_story(event):
+    replied = await event.get_reply_message()
+    if not replied:
+        return await event.reply("**⌔∮ لازم ترد على صورة أو فيديو أو نص عشان يتم رفعه كستوري**")
+
+    reply_msg = await event.reply("**⌔∮ جاري التحقق ورفع الستوري** ⏳")
+
+    try:
+        can_send = await event.client(CanSendStoryRequest(peer='me'))
+    except Exception as e:
+        return await reply_msg.edit(f"**❌ خطأ في التحقق من الحد**: {e}")
+
+    if not can_send:
+        return await reply_msg.edit("**⌔∮ تجاوزت حد الستوري هذا الأسبوع — تحتاج Premium أو انتظر للإعادة**")
+
+    # تنزيل الوسائط إن وُجدت
+    file_path = await event.client.download_media(replied.media) if replied.media else None
+
+    try:
+        await event.client(SendStoryRequest(
+            media=file_path and await event.client.upload_file(file_path),
+            caption=replied.text or None
+        ))
+
+        await reply_msg.edit("**⌔∮ تم رفع الستوري بنجاح ✅**")
+
+    except Exception as e:
+        await reply_msg.edit(f"**⚠️ فشل الرفع:** {e}")
+
+    finally:
+        if file_path and os.path.exists(file_path):
+            os.remove(file_path)
 
 @zedub.zed_cmd(pattern="الانشا(?:ء)?$")
 async def تاريخ_الانشاء(event):
