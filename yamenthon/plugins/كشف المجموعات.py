@@ -214,12 +214,19 @@ async def upload_story(event):
     reply_msg = await event.reply("**⌔∮ جاري التحقق ورفع الستوري** ⏳")
 
     try:
-        can_send = await event.client(CanSendStoryRequest(peer='me'))
+        # التحقق من إمكانية رفع الستوري
+        check = await event.client(CanSendStoryRequest())
+        if not check.can_send:
+            wait_minutes = getattr(check, "minutes", None)
+            if wait_minutes:
+                return await reply_msg.edit(
+                    f"**⌔∮ لا يمكنك رفع ستوري الآن، حاول بعد {wait_minutes} دقيقة** 🚫"
+                )
+            return await reply_msg.edit(
+                "**⌔∮ تجاوزت الحد المسموح — تحتاج Premium أو انتظر للإعادة** 🚫"
+            )
     except Exception as e:
-        return await reply_msg.edit(f"**❌ خطأ في التحقق من الحد**: {e}")
-
-    if not can_send:
-        return await reply_msg.edit("**⌔∮ تجاوزت حد الستوري هذا الأسبوع — تحتاج Premium أو انتظر للإعادة**")
+        return await reply_msg.edit(f"**❌ خطأ أثناء التحقق من الحد:** {e}")
 
     # تنزيل الوسائط إن وُجدت
     file_path = await event.client.download_media(replied.media) if replied.media else None
@@ -233,7 +240,7 @@ async def upload_story(event):
         await reply_msg.edit("**⌔∮ تم رفع الستوري بنجاح ✅**")
 
     except Exception as e:
-        await reply_msg.edit(f"**⚠️ فشل الرفع:** {e}")
+        await reply_msg.edit(f"**⚠️ فشل رفع الستوري:** {e}")
 
     finally:
         if file_path and os.path.exists(file_path):
