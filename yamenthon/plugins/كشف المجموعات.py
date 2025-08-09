@@ -206,52 +206,6 @@ async def stories(event):
     
     await reply.edit("**⌔∮ تم بنجاح تحميل الستوري ✅**")
 
-@zedub.zed_cmd(pattern="رفع ستوري$")
-async def upload_story(event):
-    replied = await event.get_reply_message()
-    if not replied:
-        return await event.reply("**⌔∮ لازم ترد على صورة أو فيديو أو نص عشان يتم رفعه كستوري**")
-
-    reply_msg = await event.reply("**⌔∮ جاري التحقق ورفع الستوري** ⏳")
-
-    try:
-        check = await event.client(CanSendStoryRequest())
-
-        if isinstance(check, bool):
-            if not check:
-                return await reply_msg.edit("**⌔∮ تجاوزت الحد المسموح — تحتاج Premium أو انتظر للإعادة** 🚫")
-
-        elif hasattr(check, "can_send") and not check.can_send:
-            wait_minutes = getattr(check, "minutes", None)
-            if wait_minutes:
-                return await reply_msg.edit(
-                    f"**⌔∮ لا يمكنك رفع ستوري الآن، حاول بعد {wait_minutes} دقيقة** 🚫"
-                )
-            return await reply_msg.edit(
-                "**⌔∮ تجاوزت الحد المسموح — تحتاج Premium أو انتظر للإعادة** 🚫"
-            )
-
-    except Exception as e:
-        return await reply_msg.edit(f"**❌ خطأ أثناء التحقق من الحد:** {e}")
-
-    file_path = await event.client.download_media(replied.media) if replied.media else None
-
-    try:
-        await event.client(SendStoryRequest(
-            media=file_path and await event.client.upload_file(file_path),
-            caption=replied.text or None,
-            privacy_rules=[InputPrivacyValueAllowAll()]  # السماح للجميع بمشاهدة الستوري
-        ))
-
-        await reply_msg.edit("**⌔∮ تم رفع الستوري بنجاح ✅**")
-
-    except Exception as e:
-        await reply_msg.edit(f"**⚠️ فشل رفع الستوري:** {e}")
-
-    finally:
-        if file_path and os.path.exists(file_path):
-            os.remove(file_path)
-
 @zedub.zed_cmd(pattern="الانشا(?:ء)?$")
 async def تاريخ_الانشاء(event):
     if not event.is_reply:
