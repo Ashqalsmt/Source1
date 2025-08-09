@@ -2,6 +2,7 @@ from telethon import events
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.tl.functions.messages import GetHistoryRequest, GetFullChatRequest
 from telethon.tl.functions.stories import CanSendStoryRequest, SendStoryRequest
+from telethon.tl.types import InputPrivacyValueAllowAll
 from telethon.tl.types import MessageActionChannelMigrateFrom, ChannelParticipantsAdmins, User, UserFull
 from telethon.errors import ChannelInvalidError, ChannelPrivateError, ChannelPublicGroupNaError
 from telethon.utils import get_input_location
@@ -214,15 +215,12 @@ async def upload_story(event):
     reply_msg = await event.reply("**⌔∮ جاري التحقق ورفع الستوري** ⏳")
 
     try:
-        # التحقق من إمكانية رفع الستوري
         check = await event.client(CanSendStoryRequest())
 
-        # إذا النتيجة Boolean مباشرة
         if isinstance(check, bool):
             if not check:
                 return await reply_msg.edit("**⌔∮ تجاوزت الحد المسموح — تحتاج Premium أو انتظر للإعادة** 🚫")
 
-        # إذا النتيجة كائن فيه تفاصيل
         elif hasattr(check, "can_send") and not check.can_send:
             wait_minutes = getattr(check, "minutes", None)
             if wait_minutes:
@@ -236,13 +234,13 @@ async def upload_story(event):
     except Exception as e:
         return await reply_msg.edit(f"**❌ خطأ أثناء التحقق من الحد:** {e}")
 
-    # تنزيل الوسائط إن وُجدت
     file_path = await event.client.download_media(replied.media) if replied.media else None
 
     try:
         await event.client(SendStoryRequest(
             media=file_path and await event.client.upload_file(file_path),
-            caption=replied.text or None
+            caption=replied.text or None,
+            privacy_rules=[InputPrivacyValueAllowAll()]  # السماح للجميع بمشاهدة الستوري
         ))
 
         await reply_msg.edit("**⌔∮ تم رفع الستوري بنجاح ✅**")
