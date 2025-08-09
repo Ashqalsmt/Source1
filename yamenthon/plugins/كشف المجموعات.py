@@ -216,7 +216,14 @@ async def upload_story(event):
     try:
         # التحقق من إمكانية رفع الستوري
         check = await event.client(CanSendStoryRequest())
-        if not check.can_send:
+
+        # إذا النتيجة Boolean مباشرة
+        if isinstance(check, bool):
+            if not check:
+                return await reply_msg.edit("**⌔∮ تجاوزت الحد المسموح — تحتاج Premium أو انتظر للإعادة** 🚫")
+
+        # إذا النتيجة كائن فيه تفاصيل
+        elif hasattr(check, "can_send") and not check.can_send:
             wait_minutes = getattr(check, "minutes", None)
             if wait_minutes:
                 return await reply_msg.edit(
@@ -225,6 +232,7 @@ async def upload_story(event):
             return await reply_msg.edit(
                 "**⌔∮ تجاوزت الحد المسموح — تحتاج Premium أو انتظر للإعادة** 🚫"
             )
+
     except Exception as e:
         return await reply_msg.edit(f"**❌ خطأ أثناء التحقق من الحد:** {e}")
 
