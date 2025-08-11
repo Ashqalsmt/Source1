@@ -59,9 +59,10 @@ async def zelzal2(event):
         await event.client.send_file(
             event.chat_id,
             repo,
-            caption=f"<b>    ⃟⁞⃟⟢ ╎الريبـو :- <code>{zelzal}</code></b>\n<b>    ⃟⁞⃟⟢ ╎تم التحميـل بواسطـة تيبــثون :- @Tepthon</b>",
+            caption=f"<b>    ⃟⁞⃟⟢ ╎الريبـو :- <code>{zelzal}</code></b>\n<b>    ⃟⁞⃟⟢ ╎تم التحميـل بواسطـة يمنثون :- @YamenThon</b>",
             parse_mode="html",
             reply_to=reply_id_,
         )
         await yamen.delete()
         await delete_conv(event, chat, purgeflag)
+
