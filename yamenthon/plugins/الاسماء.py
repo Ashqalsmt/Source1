@@ -1,33 +1,15 @@
-import re
-import asyncio
-import calendar
 import json
 import os
-from telethon import events
-from asyncio.exceptions import TimeoutError
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.messages import ExportChatInviteRequest
-from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import get_user_from_event, sanga_seperator
-from bs4 import BeautifulSoup
-from ..helpers.utils import _format
-from datetime import datetime
-from urllib.parse import quote
-import barcode
-import qrcode
-import requests
-from barcode.writer import ImageWriter
-from bs4 import BeautifulSoup
-from PIL import Image, ImageColor
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from ..Config import Config
-from ..core.logger import logging
-from ..core.managers import edit_delete, edit_or_reply
-from yamenthon.utils import admin_cmd
-from ..helpers import AioHttp
-from ..helpers.utils import _catutils, _format, reply_id
-LOGS = logging.getLogger(__name__)
+import asyncio
+from telethon.errors import YouBlockedUserError
 from yamenthon import zedub
+from ..utils import is_admin
+from ..helpers.utils import _format
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import get_user_from_event, reply_id
+
+
+
 START_FLAG_FILE = "sangmata_started.json"
 
 def has_started():
