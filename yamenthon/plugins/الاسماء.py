@@ -52,7 +52,7 @@ async def _(event):
         responses = []
         while True:
             try:
-                response = await conv.get_response(timeout=2)
+                response = await conv.get_response(timeout=9)
             except asyncio.TimeoutError:
                 break
             responses.append(response.text)
