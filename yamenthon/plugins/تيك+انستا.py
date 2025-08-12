@@ -2,8 +2,7 @@ from .. import zedub
 from ..core.managers import edit_or_reply
 from telethon import events
 import aiohttp
-from yt_dlp import YoutubeDL
-import re, asyncio
+import re
 
 # API أكثر استقراراً
 TIKTOK_API = "https://www.tikwm.com/api/"
@@ -48,6 +47,7 @@ async def tiktok_download(event):
     except Exception as e:
         await zed.edit(f"❌ خطأ: {str(e)}")
 
+
 @zedub.zed_cmd(pattern=r"انستا(?:\s+|$)(.*)")
 async def insta_download(event):
     reply = await event.get_reply_message()
@@ -58,22 +58,29 @@ async def insta_download(event):
 
     zed = await edit_or_reply(event, "⏳ جاري التحميل من إنستقرام...")
 
-    async def run_ytdlp(url):
-        loop = asyncio.get_event_loop()
-        def _download():
-            ydl_opts = {
-                "format": "best",
-                "outtmpl": "/tmp/insta_%(id)s.%(ext)s",
-                "quiet": True,
-            }
-            with YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(url, download=True)
-                return ydl.prepare_filename(info)
-        return await loop.run_in_executor(None, _download)
-
     try:
-        filename = await run_ytdlp(link)
-        await event.client.send_file(event.chat_id, filename, caption="✅ تم التحميل من إنستقرام")
+        # API خارجي من fastdl.app
+        api_url = f"https://fastdl.app/download?url={link}"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(api_url) as resp:
+                if resp.status != 200:
+                    return await zed.edit("⚠️ لم أستطع جلب الوسائط، جرّب رابط آخر.")
+                data = await resp.json()
+
+        # data يحتوي على قائمة روابط الوسائط
+        media_list = data.get("media", [])
+        if not media_list:
+            return await zed.edit("⚠️ لم أجد أي وسائط في الرابط.")
+
+        for media in media_list:
+            await event.client.send_file(
+                event.chat_id,
+                media["url"],
+                caption="📥 تم التحميل من إنستقرام"
+            )
+
         await zed.delete()
+
     except Exception as e:
-        await zed.edit(f"❌ خطأ أثناء التحميل: {e}")
+        await zed.edit(f"❌ خطأ: {str(e)}")
