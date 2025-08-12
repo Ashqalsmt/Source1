@@ -6,47 +6,48 @@ from yamenthon import zedub
 from ..utils import is_admin
 from ..helpers.utils import _format
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import get_user_from_event, reply_id
+from ..helpers import get_user_from_event, sanga_seperator
 
-
-
-START_FLAG_FILE = "sangmata_started.json"
+START_FLAG_FILE = os.path.join(os.path.dirname(__file__), "sangmata_started.json")
 
 def has_started():
     return os.path.exists(START_FLAG_FILE)
 
 def set_started():
-    with open(START_FLAG_FILE, "w") as f:
-        json.dump({"started": True}, f)
+    try:
+        with open(START_FLAG_FILE, "w") as f:
+            json.dump({"started": True}, f)
+    except Exception:
+        pass
 
-@zedub.on(admin_cmd(pattern="الاسماء(ألف)?(?:\s|$)([\s\S]*)"))
-async def _(zedub):
-    input_str = "".join(zedub.text.split(maxsplit=1)[1:])
-    reply_message = await iqthon.get_reply_message()
+@zedub.zed_cmd(pattern="الاسماء(ألف)?(?:\s|$)([\s\S]*)")
+async def _(event):
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
+    reply_message = await event.get_reply_message()
     if not input_str and not reply_message:
-        return await edit_delete(iqthon, "**♛ ⦙ قم بالـرد على رسالـة لمستخـدم ...**")
+        return await edit_delete(event, "**♛ ⦙ قم بالـرد على رسالـة لمستخـدم ...**")
 
-    user, rank = await get_user_from_event(iqthon, secondgroup=True)
+    user, rank = await get_user_from_event(event, secondgroup=True)
     if not user:
         return
 
     uid = user.id
     chat = "@SangMata_BOT"
-    iqevent = await edit_or_reply(iqthon, "**♛ ⦙ جـاري المعالجـة ↯**")
+    zedevent = await edit_or_reply(event, "**♛ ⦙ جـاري المعالجـة ↯**")
 
-    async with iqthon.client.conversation(chat) as conv:
+    async with event.client.conversation(chat) as conv:
         try:
-            # نرسل /start فقط إذا ما قد أرسلناه قبل
             if not has_started():
                 await conv.send_message("/start")
                 await asyncio.sleep(0.5)
                 set_started()
 
-            # نرسل الآيدي مباشرة
             await conv.send_message(str(uid))
 
         except YouBlockedUserError:
-            return await edit_delete(iqthon, "**♛ ⦙ قم بإلغـاء حظـر @SangMata_BOT ثم حـاول !!**")
+            return await edit_delete(event, "**♛ ⦙ قم بإلغـاء حظـر @SangMata_BOT ثم حـاول !!**")
+        except Exception as e:
+            return await edit_delete(event, f"**♛ ⦙ حدث خطأ: {str(e)}**")
 
         responses = []
         while True:
@@ -56,20 +57,20 @@ async def _(zedub):
                 break
             responses.append(response.text)
 
-        await zedub.client.send_read_acknowledge(conv.chat_id)
+        await event.client.send_read_acknowledge(conv.chat_id)
 
     if not responses:
-        return await edit_delete(iqthon, "**♛ ⦙ لا يستطيـع البـوت جلـب النتائـج ⚠️**")
+        return await edit_delete(event, "**♛ ⦙ لا يستطيـع البـوت جلـب النتائـج ⚠️**")
     if "No records found" in responses:
-        return await edit_delete(iqthon, "**♛ ⦙ المستخـدم ليـس لديـه أيّ سجـل ✕**")
+        return await edit_delete(event, "**♛ ⦙ المستخـدم ليـس لديـه أيّ سجـل ✕**")
 
     names, usernames = await sanga_seperator(responses)
-    cmd = zedub.pattern_match.group(1)
+    cmd = event.pattern_match.group(1)
     sandy = None
     check = usernames if cmd == "u" else names
     for i in check:
         if sandy:
-            await iqthon.reply(i, parse_mode=_format.parse_pre)
+            await event.reply(i, parse_mode=_format.parse_pre)
         else:
             sandy = True
-            await iqevent.edit(i, parse_mode=_format.parse_pre)
+            await zedevent.edit(i, parse_mode=_format.parse_pre)
