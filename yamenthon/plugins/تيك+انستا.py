@@ -57,10 +57,12 @@ async def insta_download(event):
 
     zed = await edit_or_reply(event, "⏳ جاري التحميل من إنستقرام...")
     try:
-        payload = {"url": link, "action": "post"}
-        html = await fetch_data(INSTAGRAM_API, method="POST", data=payload, return_json=False)
+        # API جديدة من igdownloader
+        API_URL = "https://igdownloader.com/ajax/download.php"
+        payload = {"url": link}
+        html = await fetch_data(API_URL, method="POST", data=payload, return_json=False)
 
-        # استخراج الروابط
+        # استخراج الصور والفيديوهات
         urls = re.findall(r'(https?://[^"\']+\.(?:jpg|mp4))', html)
         if not urls:
             return await zed.edit("⚠️ لم أستطع جلب الوسائط، تأكد من الرابط.")
