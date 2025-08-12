@@ -2,7 +2,8 @@ from .. import zedub
 from ..core.managers import edit_or_reply
 from telethon import events
 import aiohttp
-import re
+from yt_dlp import YoutubeDL
+import re, asyncio
 
 # API أكثر استقراراً
 TIKTOK_API = "https://www.tikwm.com/api/"
@@ -47,32 +48,32 @@ async def tiktok_download(event):
     except Exception as e:
         await zed.edit(f"❌ خطأ: {str(e)}")
 
-@zedub.zed_cmd(pattern="انستا(?:\s+|$)(.*)")
+@zedub.zed_cmd(pattern=r"انستا(?:\s+|$)(.*)")
 async def insta_download(event):
     reply = await event.get_reply_message()
-    link = event.pattern_match.group(1) or (reply.text if reply else "")
+    link = event.pattern_match.group(1).strip() or (reply.text.strip() if reply else "")
 
     if not link or not re.search(r"(instagram\.com|instagr\.am)", link):
         return await edit_or_reply(event, "📌 أرسل رابط إنستقرام بعد الأمر أو بالرد على الرابط.")
 
     zed = await edit_or_reply(event, "⏳ جاري التحميل من إنستقرام...")
+
+    async def run_ytdlp(url):
+        loop = asyncio.get_event_loop()
+        def _download():
+            ydl_opts = {
+                "format": "best",
+                "outtmpl": "/tmp/insta_%(id)s.%(ext)s",
+                "quiet": True,
+            }
+            with YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(url, download=True)
+                return ydl.prepare_filename(info)
+        return await loop.run_in_executor(None, _download)
+
     try:
-        # API جديدة من igdownloader
-        API_URL = "https://igdownloader.com/ajax/download.php"
-        payload = {"url": link}
-        html = await fetch_data(API_URL, method="POST", data=payload, return_json=False)
-
-        # استخراج الصور والفيديوهات
-        urls = re.findall(r'(https?://[^"\']+\.(?:jpg|mp4))', html)
-        if not urls:
-            return await zed.edit("⚠️ لم أستطع جلب الوسائط، تأكد من الرابط.")
-
-        for media in urls:
-            if media.endswith(".mp4"):
-                await event.client.send_file(event.chat_id, media, caption="🎬 فيديو من إنستقرام")
-            else:
-                await event.client.send_file(event.chat_id, media, caption="📸 صورة من إنستقرام")
-
+        filename = await run_ytdlp(link)
+        await event.client.send_file(event.chat_id, filename, caption="✅ تم التحميل من إنستقرام")
         await zed.delete()
     except Exception as e:
-        await zed.edit(f"❌ خطأ: {str(e)}")
+        await zed.edit(f"❌ خطأ أثناء التحميل: {e}")
