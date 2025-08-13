@@ -10,9 +10,9 @@ from telethon import events
 import aiohttp
 import re
 
-# API أكثر استقراراً
+# 𝑨𝑺𝑯𝑬𝑸 𝑨𝑳𝑺𝑨𝑴𝑻 𝒀𝑨𝑴𝑬𝑵𝑻𝑯𝑶𝑵
 TIKTOK_API = "https://www.tikwm.com/api/"
-INSTAGRAM_API = "https://snapinsta.io/action.php"  # SnapInsta
+INSTAGRAM_API = "https://snapinsta.io/action.php"  # 𝑨𝑺𝑯𝑬𝑸 𝑨𝑳𝑺𝑨𝑴𝑻 𝒀𝑨𝑴𝑬𝑵𝑻𝑯𝑶𝑵
 
 async def fetch_data(url, params=None, method="GET", data=None, return_json=True):
     async with aiohttp.ClientSession() as session:
@@ -40,11 +40,11 @@ async def tiktok_download(event):
 
         result = data["data"]
 
-        # فيديو
+        # 𝑨𝑺𝑯𝑬𝑸 𝑨𝑳𝑺𝑨𝑴𝑻 𝒀𝑨𝑴𝑬𝑵𝑻𝑯𝑶𝑵
         if result.get("play"):
             await event.client.send_file(event.chat_id, result["play"], caption="**𝑶𝑲✅𝑻𝑰𝑲 𝑻𝑶𝑲**\n[➧𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉](https://t.me/YamenThon)")
 
-        # صور متعددة
+        # 𝑨𝑺𝑯𝑬𝑸 𝑨𝑳𝑺𝑨𝑴𝑻 𝒀𝑨𝑴𝑬𝑵𝑻𝑯𝑶𝑵
         if result.get("images"):
             for img in result["images"]:
                 await event.client.send_file(event.chat_id, img, caption="📸 صورة من تيك توك")
