@@ -65,26 +65,27 @@ async def insta_download(event):
     zed = await edit_or_reply(event, "⏳ جاري التحميل من إنستقرام...")
 
     try:
-        # API خارجي من fastdl.app
-        api_url = f"https://fastdl.app/download?url={link}"
+        api_url = "https://insta.savetube.me/downloadPostVideo"
+        payload = {"url": link}
 
         async with aiohttp.ClientSession() as session:
-            async with session.get(api_url) as resp:
+            async with session.post(api_url, json=payload) as resp:
                 if resp.status != 200:
                     return await zed.edit("⚠️ لم أستطع جلب الوسائط، جرّب رابط آخر.")
                 data = await resp.json()
 
-        # data يحتوي على قائمة روابط الوسائط
-        media_list = data.get("media", [])
-        if not media_list:
+        video_url = data.get("post_video_url")
+        thumb_url = data.get("post_video_thumbnail")
+
+        if not video_url:
             return await zed.edit("⚠️ لم أجد أي وسائط في الرابط.")
 
-        for media in media_list:
-            await event.client.send_file(
-                event.chat_id,
-                media["url"],
-                caption="📥 تم التحميل من إنستقرام"
-            )
+        await event.client.send_file(
+            event.chat_id,
+            video_url,
+            caption="📥 تم التحميل من إنستقرام",
+            thumb=thumb_url if thumb_url else None
+        )
 
         await zed.delete()
 
