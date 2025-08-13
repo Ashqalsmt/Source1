@@ -13,7 +13,7 @@ API_BASE = "https://apisyu.com/api/yt"
 # الصيغة: /mp3?url=... أو /mp4?url=...
 
 @zedub.zed_cmd(
-    pattern="(?:بحث|ابحث|اغنيه)(?:\s|$)([\s\S]*)",
+    pattern="(?:بحث|اغنيه)(?:\s|$)([\s\S]*)",
     command=("بحث", plugin_category),
     info={
         "header": "تحميل أغاني من يوتيوب عبر API خارجي",
