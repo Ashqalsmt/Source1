@@ -83,7 +83,7 @@ async def insta_download(event):
         await event.client.send_file(
             event.chat_id,
             video_url,
-            caption="📥 تم التحميل من إنستقرام",
+            caption="**📥 تم التحميل من إنستقرام**\n[➧𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉](https://t.me/YamenThon)")",
             thumb=thumb_url if thumb_url else None
         )
 
