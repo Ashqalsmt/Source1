@@ -42,7 +42,7 @@ async def tiktok_download(event):
 
         # فيديو
         if result.get("play"):
-            await event.client.send_file(event.chat_id, result["play"], caption="**✅ تيك توك بدون علامة مائية**\n[➧𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉](https://t.me/YamenThon)")
+            await event.client.send_file(event.chat_id, result["play"], caption="**𝑶𝑲✅𝑻𝑰𝑲 𝑻𝑶𝑲**\n[➧𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉](https://t.me/YamenThon)")
 
         # صور متعددة
         if result.get("images"):
@@ -83,7 +83,7 @@ async def insta_download(event):
         await event.client.send_file(
             event.chat_id,
             video_url,
-            caption="**📥 تم التحميل من إنستقرام**\n[➧𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉](https://t.me/YamenThon)")",
+            caption="**𝑶𝑲📥𝑰𝑵𝑺𝑻𝑨𝑮𝑹𝑨𝑴**\n[➧𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉](https://t.me/YamenThon)")",
             thumb=thumb_url if thumb_url else None
         )
 
