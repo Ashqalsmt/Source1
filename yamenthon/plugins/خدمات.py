@@ -21,61 +21,6 @@ from ..helpers.utils import reply_id
 
 plugin_category = "الخدمات"
 
-@zedub.zed_cmd(pattern="اغنيه(?: |$)(.*)")
-async def _(event):
-    if event.fwd_from:
-        return
-    d_link = event.pattern_match.group(1)
-    if ".com" not in d_link:
-        await event.edit("**╮ جـارِ البحث ؏ـن الاغنيـٓه... 🎧♥️╰**")
-    else:
-        await event.edit("**╮ جـارِ البحث ؏ـن الاغنيـٓه... 🎧♥️╰**")
-    chat = "@Abm_MusicDownloader_Bot"
-    async with borg.conversation(chat) as conv: # code by t.me/zzzzl1l
-        try:
-            await conv.send_message("/start")
-            await conv.get_response()
-            await conv.send_message(d_link)
-            await conv.get_response()
-            await asyncio.sleep(5)
-            zelzal = await conv.get_response()
-            if "⏳" not in zelzal.text:
-                await zelzal.click(0)
-                await asyncio.sleep(5)
-                zelzal = await conv.get_response()
-                await event.delete()
-                await borg.send_file(
-                    event.chat_id,
-                    zelzal,
-                    caption=f"**❈╎البحـث :** `{d_link}`",
-                )
-
-            else:
-                await event.edit("**- لـم استطـع العثـور على نتائـج ؟!**\n**- حـاول مجـدداً في وقت لاحـق ...**")
-        except YouBlockedUserError:
-            await conv.send_message("/start")
-            await conv.get_response()
-            await conv.send_message(d_link)
-            await conv.get_response()
-            await asyncio.sleep(5)
-            zelzal = await conv.get_response()
-            zelzal = await conv.get_response()
-            if "⏳" not in zelzal.text:
-                await zelzal.click(0)
-                await asyncio.sleep(5)
-                zelzal = await conv.get_response()
-                await event.delete()
-                await borg.send_file(
-                    event.chat_id,
-                    zelzal,
-                    caption=f"**❈╎البحـث :** `{d_link}`",
-                )
-
-            else:
-                await event.edit("**- لـم استطـع العثـور على نتائـج ؟!**\n**- حـاول مجـدداً في وقت لاحـق ...**")
-
-
-
 @zedub.zed_cmd(pattern="تطبيق(?: |$)(.*)")
 async def _(event):
     if event.fwd_from:
@@ -183,4 +128,5 @@ async def zed(event):
     tap = await bot.inline_query(zelzal, zedr)
     await tap[0].click(event.chat_id)
     await event.delete()
+
 
