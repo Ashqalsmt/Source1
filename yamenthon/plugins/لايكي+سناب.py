@@ -10,41 +10,73 @@ from telethon import events
 import aiohttp
 import re
 
-@zedub.zed_cmd(pattern=r"(لايكي|سناب)(?:\s+|$)(.*)")
-async def likee_snap_download(event):
-    platform = event.pattern_match.group(1)
-    query = event.pattern_match.group(2).strip()
+# ================== إعدادات API ==================
+LIKEE_API_URL = "https://likee-video-downloader-without-watermark.p.rapidapi.com/likee"
+LIKEE_API_KEY = "75e4c64b61mshf5ca7e24bacfaa5p1d45e2jsn27e7d689dd7f"
 
+SNAPCHAT_API_URL = "https://snapchat-video-downloader.p.rapidapi.com/snapchat"
+SNAPCHAT_API_KEY = "75e4c64b61mshf5ca7e24bacfaa5p1d45e2jsn27e7d689dd7f"
+
+# ================== دالة جلب البيانات ==================
+async def fetch_api(url, headers=None, params=None):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers, params=params) as resp:
+            if resp.status == 200:
+                return await resp.json()
+            return None
+
+# ================== تحميل من Likee ==================
+@zedub.zed_cmd(pattern=r"لايكي(?:\s+|$)(.*)")
+async def likee_download(event):
     reply = await event.get_reply_message()
-    link = query or (reply.text.strip() if reply else "")
+    link = event.pattern_match.group(1).strip() or (reply.text.strip() if reply else "")
 
-    if not link or not re.search(r"(likee\.video|snapchat\.com)", link):
-        return await edit_or_reply(event, f"📌 أرسل رابط {platform} بعد الأمر أو بالرد على الرابط.")
+    if not link or "likee.video" not in link:
+        return await edit_or_reply(event, "📌 أرسل رابط لايكي بعد الأمر أو بالرد على الرابط.")
 
-    zed = await edit_or_reply(event, f"⏳ جاري التحميل من {platform}...")
+    zed = await edit_or_reply(event, "⏳ جاري التحميل من لايكي...")
 
-    try:
-        # API خارجي موحد
-        api_url = f"https://api.akashsir.in/download?url={link}"
+    headers = {
+        "X-RapidAPI-Key": LIKEE_API_KEY,
+        "X-RapidAPI-Host": "likee-video-downloader-without-watermark.p.rapidapi.com"
+    }
+    params = {"url": link}
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(api_url) as resp:
-                if resp.status != 200:
-                    return await zed.edit(f"⚠️ لم أستطع جلب الوسائط من {platform}، جرّب رابط آخر.")
-                data = await resp.json()
+    data = await fetch_api(LIKEE_API_URL, headers=headers, params=params)
+    if not data or not data.get("video"):
+        return await zed.edit("⚠️ لم أستطع جلب الفيديو من لايكي.")
 
-        # استخراج الرابط
-        media_url = data.get("url") or data.get("download_url")
-        if not media_url:
-            return await zed.edit(f"⚠️ لم أجد أي وسائط في الرابط المرسل.")
+    await event.client.send_file(
+        event.chat_id,
+        data["video"],
+        caption="📥 تم التحميل من **Likee**"
+    )
+    await zed.delete()
 
-        await event.client.send_file(
-            event.chat_id,
-            media_url,
-            caption=f"📥 تم التحميل من {platform}"
-        )
+# ================== تحميل من Snapchat ==================
+@zedub.zed_cmd(pattern=r"سناب(?:\s+|$)(.*)")
+async def snapchat_download(event):
+    reply = await event.get_reply_message()
+    link = event.pattern_match.group(1).strip() or (reply.text.strip() if reply else "")
 
-        await zed.delete()
+    if not link or "snapchat.com" not in link:
+        return await edit_or_reply(event, "📌 أرسل رابط سناب شات بعد الأمر أو بالرد على الرابط.")
 
-    except Exception as e:
-        await zed.edit(f"❌ خطأ: {str(e)}")
+    zed = await edit_or_reply(event, "⏳ جاري التحميل من سناب شات...")
+
+    headers = {
+        "X-RapidAPI-Key": SNAPCHAT_API_KEY,
+        "X-RapidAPI-Host": "snapchat-video-downloader.p.rapidapi.com"
+    }
+    params = {"url": link}
+
+    data = await fetch_api(SNAPCHAT_API_URL, headers=headers, params=params)
+    if not data or not data.get("video"):
+        return await zed.edit("⚠️ لم أستطع جلب الفيديو من سناب شات.")
+
+    await event.client.send_file(
+        event.chat_id,
+        data["video"],
+        caption="📥 تم التحميل من **Snapchat**"
+    )
+    await zed.delete()
