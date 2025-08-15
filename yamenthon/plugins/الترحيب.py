@@ -1,7 +1,6 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
-from telethon import events, types, functions
+from telethon import events, functions, types
 from telethon.utils import get_display_name
-from telethon import functions, types
 
 from yamenthon import zedub
 from yamenthon.core.logger import logging
@@ -21,60 +20,83 @@ LOGS = logging.getLogger(__name__)
 
 
 @zedub.on(events.ChatAction)
-async def _(event):  # sourcery no-metrics
-    cws = get_current_welcome_settings(event.chat_id)
-    if (
-        cws
-        and (event.user_joined or event.user_added)
-        and not (await event.get_user()).bot
-    ):
+async def welcome_handler(event):
+    try:
+        cws = get_current_welcome_settings(event.chat_id)
+        if not cws:
+            return
+
+        # تجاهل البوتات
+        user = await event.get_user()
+        if not user or user.bot:
+            return
+
+        # تغطية كل سيناريوهات الانضمام في السوبرجروب
+        action = getattr(getattr(event, "action_message", None), "action", None)
+        joined = (
+            getattr(event, "user_joined", False) or
+            getattr(event, "user_added", False) or
+            isinstance(action, getattr(types, "MessageActionChatJoinedByLink", ())) or
+            isinstance(action, getattr(types, "MessageActionChatAddUser", ())) or
+            isinstance(action, getattr(types, "MessageActionChatJoinedByRequest", ()))
+        )
+        if not joined:
+            return
+
+        # حذف الترحيب السابق إذا الخيار مفعل (القيمة الافتراضية كما في كودك)
         if gvarstatus("clean_welcome") is None:
             try:
                 await event.client.delete_messages(event.chat_id, cws.previous_welcome)
             except Exception as e:
-                LOGS.warn(str(e))
-        a_user = await event.get_user()
+                LOGS.warning(f"delete previous welcome failed: {e}")
+
         chat = await event.get_chat()
         me = await event.client.get_me()
-        title = get_display_name(await event.get_chat()) or "لـ هـذه الدردشـة"
+
+        title = get_display_name(chat) or "لـ هـذه الدردشـة"
+
+        # عدّ الأعضاء بطريقة سريعة وآمنة
         count = "?"
-        
         try:
             if isinstance(chat, types.Channel):  # سوبرجروب/قناة
                 full = await event.client(functions.channels.GetFullChannelRequest(chat))
                 count = full.full_chat.participants_count
             else:  # جروب عادي
                 full = await event.client(functions.messages.GetFullChatRequest(chat.id))
-                count = len(full.full_chat.participants.participants)
-        except Exception:
-            pass  # احتياطًا لو فشل الطلب، لا توقف الترحيب
+                parts = getattr(full.full_chat, "participants", None)
+                count = len(parts.participants) if parts and getattr(parts, "participants", None) else "?"
+        except Exception as e:
+            LOGS.debug(f"participants count fallback: {e}")
 
-        mention = "<a href='tg://user?id={}'>{}</a>".format(
-            a_user.id, a_user.first_name
-        )
-        my_mention = "<a href='tg://user?id={}'>{}</a>".format(me.id, me.first_name)
-        first = a_user.first_name
-        last = a_user.last_name
+        # المتغيّرات القابلة للاستبدال
+        mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
+        my_mention = f"<a href='tg://user?id={me.id}'>{me.first_name}</a>"
+        first = user.first_name
+        last = user.last_name
         fullname = f"{first} {last}" if last else first
-        username = f"@{a_user.username}" if a_user.username else mention
-        userid = a_user.id
+        username = f"@{user.username}" if user.username else mention
+        userid = user.id
         my_first = me.first_name
         my_last = me.last_name
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
+
+        # جلب رسالة الترحيب المحفوظة (نص/ميديا)
         file_media = None
         current_saved_welcome_message = None
-        if cws:
-            if cws.f_mesg_id:
-                msg_o = await event.client.get_messages(
-                    entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
-                )
-                file_media = msg_o.media
-                current_saved_welcome_message = msg_o.message
-                link_preview = True
-            elif cws.reply:
-                current_saved_welcome_message = cws.reply
-                link_preview = False
+        link_preview = False
+
+        if cws.f_mesg_id:
+            msg_o = await event.client.get_messages(BOTLOG_CHATID, ids=int(cws.f_mesg_id))
+            file_media = msg_o.media
+            current_saved_welcome_message = msg_o.message
+            link_preview = True
+        elif cws.reply:
+            current_saved_welcome_message = cws.reply
+
+        if not current_saved_welcome_message:
+            return  # لا ترحيب محفوظ
+
         current_message = await event.reply(
             current_saved_welcome_message.format(
                 mention=mention,
@@ -96,6 +118,8 @@ async def _(event):  # sourcery no-metrics
             link_preview=link_preview,
         )
         update_previous_welcome(event.chat_id, current_message.id)
+    except Exception as e:
+        LOGS.error(f"welcome handler error: {e}")
 
 @zedub.zed_cmd(
     pattern="ترحيب(?:\s|$)([\s\S]*)",
