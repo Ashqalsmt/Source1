@@ -3,58 +3,62 @@
 #احترم عقلك وكتب كود تحميـل ترا سهل 
 #بس شغلكم تخميط بس ههههه😂
 #خذ الكود عادي بس لا تقول انه تبعك
+# سورس يمنثون - عاشق الصمت
 from .. import zedub
 from ..core.managers import edit_or_reply
 from telethon import events
 import aiohttp
-import re
 import mimetypes
+import tempfile
+import os
+import re
 
-API_BASE = "https://secretv1.sbs/api/v9/?url="
+API_BASE = "https://secretv1.sbs/api/v9?url="
 
-async def download_media(event, platform_name, url_pattern):
-    reply = await event.get_reply_message()
-    link = event.pattern_match.group(1) or (reply.text.strip() if reply else "")
-
-    if not link or not re.search(url_pattern, link):
-        return await edit_or_reply(event, f"📌 أرسل رابط {platform_name} بعد الأمر أو بالرد على الرابط.")
-
-    zed = await edit_or_reply(event, f"⏳ جاري التحميل من {platform_name}...")
+async def download_and_send(event, platform, link):
+    zed = await edit_or_reply(event, f"⏳ جاري التحميل من {platform}...")
 
     try:
+        # جلب الملف من API
         async with aiohttp.ClientSession() as session:
             async with session.get(API_BASE + link) as resp:
                 if resp.status != 200:
-                    return await zed.edit(f"⚠️ فشل التحميل من {platform_name}")
-
+                    return await zed.edit("⚠️ لم أستطع جلب الوسائط، تأكد من الرابط.")
+                
                 content_type = resp.headers.get("Content-Type", "").lower()
-                ext = mimetypes.guess_extension(content_type.split(";")[0]) or ".bin"
+                ext = mimetypes.guess_extension(content_type.split(";")[0]) or ".mp4"
 
-                file_bytes = await resp.read()
+                temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
+                temp_file.write(await resp.read())
+                temp_file.close()
 
-        file_name = f"{platform_name}{ext}"
-        await event.client.send_file(event.chat_id, file_bytes, file=file_name, caption=f"📥 تم التحميل من {platform_name}")
+        # إرسال الملف
+        await event.client.send_file(
+            event.chat_id,
+            file=temp_file.name,
+            caption=f"📥 تم التحميل من {platform}"
+        )
+
+        # حذف الملف المؤقت
+        os.remove(temp_file.name)
         await zed.delete()
 
     except Exception as e:
         await zed.edit(f"❌ خطأ: {str(e)}")
 
+def register_command(pattern, platform_name, domain_pattern):
+    @zedub.zed_cmd(pattern=pattern)
+    async def handler(event):
+        reply = await event.get_reply_message()
+        link = event.pattern_match.group(1).strip() if event.pattern_match.group(1) else (reply.text.strip() if reply else "")
 
-@zedub.zed_cmd(pattern=r"سناب(?:\s+|$)(.*)")
-async def snap_download(event):
-    await download_media(event, "سناب شات", r"snapchat\.com")
+        if not link or not re.search(domain_pattern, link):
+            return await edit_or_reply(event, f"📌 أرسل رابط {platform_name} بعد الأمر أو بالرد على الرابط.")
 
+        await download_and_send(event, platform_name, link)
 
-@zedub.zed_cmd(pattern=r"لايكي(?:\s+|$)(.*)")
-async def likee_download(event):
-    await download_media(event, "لايكي", r"likee\.")
-
-
-@zedub.zed_cmd(pattern=r"فيس(?:\s+|$)(.*)")
-async def facebook_download(event):
-    await download_media(event, "فيسبوك", r"(facebook\.com|fb\.watch)")
-
-
-@zedub.zed_cmd(pattern=r"(?:تويتر|اكس)(?:\s+|$)(.*)")
-async def twitter_download(event):
-    await download_media(event, "تويتر (X)", r"(twitter\.com|x\.com)")
+# تسجيل الأوامر
+register_command(r"سناب(?:\s+|$)(.*)", "سناب شات", r"(snapchat\.com)")
+register_command(r"لايكي(?:\s+|$)(.*)", "لايكي", r"(likee\.video|likee\.app)")
+register_command(r"فيس(?:\s+|$)(.*)", "فيسبوك", r"(facebook\.com|fb\.watch)")
+register_command(r"تويتر(?:\s+|$)(.*)", "تويتر", r"(twitter\.com|x\.com)")
