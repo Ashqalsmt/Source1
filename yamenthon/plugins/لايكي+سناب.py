@@ -8,15 +8,9 @@ from ..core.managers import edit_or_reply
 from telethon import events
 import aiohttp
 import re
+import mimetypes
 
-API_BASE = "https://secretv1.sbs/api/v9?url="
-
-async def fetch_media(link):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(API_BASE + link) as resp:
-            if resp.status != 200:
-                return None
-            return await resp.json()
+API_BASE = "https://secretv1.sbs/api/v9/?url="
 
 async def download_media(event, platform_name, url_pattern):
     reply = await event.get_reply_message()
@@ -28,12 +22,18 @@ async def download_media(event, platform_name, url_pattern):
     zed = await edit_or_reply(event, f"⏳ جاري التحميل من {platform_name}...")
 
     try:
-        data = await fetch_media(link)
-        if not data or "url" not in data:
-            return await zed.edit("⚠️ لم أجد أي وسائط في الرابط المرسل.")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(API_BASE + link) as resp:
+                if resp.status != 200:
+                    return await zed.edit(f"⚠️ فشل التحميل من {platform_name}")
 
-        media_url = data["url"]
-        await event.client.send_file(event.chat_id, media_url, caption=f"📥 تم التحميل من {platform_name}")
+                content_type = resp.headers.get("Content-Type", "").lower()
+                ext = mimetypes.guess_extension(content_type.split(";")[0]) or ".bin"
+
+                file_bytes = await resp.read()
+
+        file_name = f"{platform_name}{ext}"
+        await event.client.send_file(event.chat_id, file_bytes, file=file_name, caption=f"📥 تم التحميل من {platform_name}")
         await zed.delete()
 
     except Exception as e:
@@ -47,7 +47,7 @@ async def snap_download(event):
 
 @zedub.zed_cmd(pattern=r"لايكي(?:\s+|$)(.*)")
 async def likee_download(event):
-    await download_media(event, "لايكي", r"likee\.video")
+    await download_media(event, "لايكي", r"likee\.")
 
 
 @zedub.zed_cmd(pattern=r"فيس(?:\s+|$)(.*)")
@@ -55,6 +55,6 @@ async def facebook_download(event):
     await download_media(event, "فيسبوك", r"(facebook\.com|fb\.watch)")
 
 
-@zedub.zed_cmd(pattern=r"(تويتر|اكس)(?:\s+|$)(.*)")
+@zedub.zed_cmd(pattern=r"(?:تويتر|اكس)(?:\s+|$)(.*)")
 async def twitter_download(event):
     await download_media(event, "تويتر (X)", r"(twitter\.com|x\.com)")
