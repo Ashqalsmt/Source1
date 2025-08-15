@@ -50,7 +50,7 @@ async def welcome_handler(event):
         me = await event.client.get_me()
         title = get_display_name(chat) or "لـ هـذه الدردشـة"
         full = await event.client(functions.channels.GetFullChannelRequest(chat))
-count = full.full_chat.participants_count
+        count = full.full_chat.participants_count
 
         mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
         my_mention = f"<a href='tg://user?id={me.id}'>{me.first_name}</a>"
