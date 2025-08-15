@@ -36,8 +36,21 @@ async def _(event):  # sourcery no-metrics
         chat = await event.get_chat()
         me = await event.client.get_me()
         title = get_display_name(await event.get_chat()) or "لـ هـذه الدردشـة"
-        participants = await event.client.get_participants(chat)
-        count = len(participants)
+
+# ...
+        chat = await event.get_chat()
+
+   try:
+      if isinstance(chat, types.Channel):  # سوبرجروب/قناة
+        full = await event.client(functions.channels.GetFullChannelRequest(chat))
+        count = full.full_chat.participants_count
+    else:  # جروب عادي
+        full = await event.client(functions.messages.GetFullChatRequest(chat.id))
+        # في الجروبات العادية ما فيه participants_count مباشر
+        count = len(full.full_chat.participants.participants)
+  except Exception:
+    # احتياطًا لو فشل الطلب، لا توقف الترحيب
+    count = "?"
         mention = "<a href='tg://user?id={}'>{}</a>".format(
             a_user.id, a_user.first_name
         )
