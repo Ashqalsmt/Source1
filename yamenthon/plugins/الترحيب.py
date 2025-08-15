@@ -1,9 +1,6 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
-from telethon import events, functions, types
+from telethon import events
 from telethon.utils import get_display_name
-from datetime import datetime, timedelta
-from telethon.tl.functions.channels import GetParticipantsRequest
-from telethon.tl.types import ChannelParticipantsRecent
 
 from yamenthon import zedub
 from yamenthon.core.logger import logging
@@ -23,58 +20,50 @@ LOGS = logging.getLogger(__name__)
 
 
 @zedub.on(events.ChatAction)
-async def welcome_handler(event):
-    try:
-        cws = get_current_welcome_settings(event.chat_id)
-        if not cws:
-            return
-
-        user = await event.get_user()
-        if not user or user.bot:
-            return
-
-        if not (event.user_joined or event.user_added):
-            return
-
+async def _(event):  # sourcery no-metrics
+    cws = get_current_welcome_settings(event.chat_id)
+    if (
+        cws
+        and (event.user_joined or event.user_added)
+        and not (await event.get_user()).bot
+    ):
         if gvarstatus("clean_welcome") is None:
             try:
                 await event.client.delete_messages(event.chat_id, cws.previous_welcome)
             except Exception as e:
-                LOGS.warning(str(e))
-
+                LOGS.warn(str(e))
+        a_user = await event.get_user()
         chat = await event.get_chat()
         me = await event.client.get_me()
-        title = get_display_name(chat) or "لـ هـذه الدردشـة"
-        full = await event.client(functions.channels.GetFullChannelRequest(chat))
-        count = full.full_chat.participants_count
-
-        mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
-        my_mention = f"<a href='tg://user?id={me.id}'>{me.first_name}</a>"
-        first = user.first_name
-        last = user.last_name
+        title = get_display_name(await event.get_chat()) or "لـ هـذه الدردشـة"
+        participants = await event.client.get_participants(chat)
+        count = len(participants)
+        mention = "<a href='tg://user?id={}'>{}</a>".format(
+            a_user.id, a_user.first_name
+        )
+        my_mention = "<a href='tg://user?id={}'>{}</a>".format(me.id, me.first_name)
+        first = a_user.first_name
+        last = a_user.last_name
         fullname = f"{first} {last}" if last else first
-        username = f"@{user.username}" if user.username else mention
-        userid = user.id
+        username = f"@{a_user.username}" if a_user.username else mention
+        userid = a_user.id
         my_first = me.first_name
         my_last = me.last_name
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
-
         file_media = None
         current_saved_welcome_message = None
-        link_preview = False
-
-        if cws.f_mesg_id:
-            msg_o = await event.client.get_messages(BOTLOG_CHATID, ids=int(cws.f_mesg_id))
-            file_media = msg_o.media
-            current_saved_welcome_message = msg_o.message
-            link_preview = True
-        elif cws.reply:
-            current_saved_welcome_message = cws.reply
-
-        if not current_saved_welcome_message:
-            return
-
+        if cws:
+            if cws.f_mesg_id:
+                msg_o = await event.client.get_messages(
+                    entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
+                )
+                file_media = msg_o.media
+                current_saved_welcome_message = msg_o.message
+                link_preview = True
+            elif cws.reply:
+                current_saved_welcome_message = cws.reply
+                link_preview = False
         current_message = await event.reply(
             current_saved_welcome_message.format(
                 mention=mention,
@@ -95,12 +84,9 @@ async def welcome_handler(event):
             parse_mode="html",
             link_preview=link_preview,
         )
-
         update_previous_welcome(event.chat_id, current_message.id)
 
-    except Exception as e:
-        LOGS.error(f"welcome handler error: {e}")
-        
+
 @zedub.zed_cmd(
     pattern="ترحيب(?:\s|$)([\s\S]*)",
     command=("ترحيب", plugin_category),
@@ -215,19 +201,20 @@ async def show_welcome(event):
         "الاسـتخـدام": "{tr}cleanwelcome <on/off>",
     },
 )
-async def set_clean_welcome(event):  # تغيير الاسم هنا
+async def del_welcome(event):
+    "To turn off or turn on of deleting previous welcome message."
     input_str = event.pattern_match.group(1)
     if input_str == "on":
         if gvarstatus("clean_welcome") is None:
-            return await edit_delete(event, "✓ تم تفعيل حذف الترحيب السابق بالفعل")
+            return await edit_delete(event, "__Already it was turned on.__")
         delgvar("clean_welcome")
         return await edit_delete(
             event,
-            "✓ من الآن سيتم حذف الترحيب السابق وإرسال ترحيب جديد",
+            "__From now on previous welcome message will be deleted and new welcome message will be sent.__",
         )
     if gvarstatus("clean_welcome") is None:
         addgvar("clean_welcome", "false")
         return await edit_delete(
-            event, "✓ من الآن لن يتم حذف الترحيب السابق"
+            event, "__From now on previous welcome message will not be deleted .__"
         )
-    await edit_delete(event, "✗ تم تعطيل حذف الترحيب السابق بالفعل")
+    await edit_delete(event, "It was turned off already")
