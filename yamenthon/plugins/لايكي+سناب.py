@@ -36,7 +36,7 @@ async def download_and_send(event, platform, link):
         await event.client.send_file(
             event.chat_id,
             file=temp_file.name,
-            caption=f"📥 تم التحميل من {platform}"
+            caption=f"𝑶𝑲📥𝑫𝑶𝑾𝑵𝑳𝑶𝑨𝑫 {platform}"
         )
 
         # حذف الملف المؤقت
@@ -58,7 +58,7 @@ def register_command(pattern, platform_name, domain_pattern):
         await download_and_send(event, platform_name, link)
 
 # تسجيل الأوامر
-register_command(r"سناب(?:\s+|$)(.*)", "سناب شات", r"(snapchat\.com)")
-register_command(r"لايكي(?:\s+|$)(.*)", "لايكي", r"(likee\.video|likee\.app)")
-register_command(r"فيس(?:\s+|$)(.*)", "فيسبوك", r"(facebook\.com|fb\.watch)")
-register_command(r"تويتر(?:\s+|$)(.*)", "تويتر", r"(twitter\.com|x\.com)")
+register_command(r"سناب(?:\s+|$)(.*)", "𝑺𝑵𝑨𝑷 𝑪𝑯𝑨𝑻", r"(snapchat\.com)")
+register_command(r"لايكي(?:\s+|$)(.*)", "𝑳𝑰𝑲𝑬𝑬", r"(likee\.video|likee\.app)")
+register_command(r"فيس(?:\s+|$)(.*)", "𝑭𝑨𝑪𝑬𝑩𝑶𝑶𝑲", r"(facebook\.com|fb\.watch)")
+register_command(r"تويتر(?:\s+|$)(.*)", "𝑻𝑾𝑰𝑻𝑻𝑬𝑹⍣𝑿", r"(twitter\.com|x\.com)")
