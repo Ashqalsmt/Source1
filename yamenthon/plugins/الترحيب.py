@@ -24,12 +24,11 @@ LOGS = logging.getLogger(__name__)
 
 
 
-@zedub.on(events.ChatAction)
+@zedub.on(events.MemberJoined)
 async def welcome_handler(event):
-    try:
-        cws = get_current_welcome_settings(event.chat_id)
-        if not cws:
-            return
+    user = await event.get_user()
+    if not user or user.bot:
+        return
 
         user = await event.get_user()
         if not user or user.bot:
