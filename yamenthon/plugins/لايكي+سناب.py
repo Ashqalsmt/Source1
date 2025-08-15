@@ -36,7 +36,7 @@ async def download_and_send(event, platform, link):
         await event.client.send_file(
             event.chat_id,
             file=temp_file.name,
-            caption=f"𝑶𝑲📥𝑫𝑶𝑾𝑵𝑳𝑶𝑨𝑫 {platform}"
+            caption=f"𝑶𝑲📥𝑫𝑶𝑾𝑵𝑳𝑶𝑨𝑫 {platform} \n[➧𝙎𝙊𝙐𝙍𝘾𝙀 𝙔𝘼𝙈𝙀𝙉𝙏𝙃𝙊𝙉](https://t.me/YamenThon)"
         )
 
         # حذف الملف المؤقت
