@@ -22,23 +22,20 @@ plugin_category = "الخدمات"
 LOGS = logging.getLogger(__name__)
 
 
-
-
-@zedub.on(events.MemberJoined)
+@zedub.on(events.ChatAction)
 async def welcome_handler(event):
-    user = await event.get_user()
-    if not user or user.bot:
-        return
+    try:
+        cws = get_current_welcome_settings(event.chat_id)
+        if not cws:
+            return
 
         user = await event.get_user()
         if not user or user.bot:
             return
 
-        # التقاط الانضمام فقط (من رابط أو إضافة)
         if not (event.user_joined or event.user_added):
             return
 
-        # حذف الترحيب السابق إذا الخيار مفعل
         if gvarstatus("clean_welcome") is None:
             try:
                 await event.client.delete_messages(event.chat_id, cws.previous_welcome)
@@ -78,7 +75,6 @@ async def welcome_handler(event):
         if not current_saved_welcome_message:
             return
 
-        # إرسال الترحيب
         current_message = await event.reply(
             current_saved_welcome_message.format(
                 mention=mention,
@@ -104,7 +100,6 @@ async def welcome_handler(event):
 
     except Exception as e:
         LOGS.error(f"welcome handler error: {e}")
-
         
 @zedub.zed_cmd(
     pattern="ترحيب(?:\s|$)([\s\S]*)",
@@ -220,20 +215,19 @@ async def show_welcome(event):
         "الاسـتخـدام": "{tr}cleanwelcome <on/off>",
     },
 )
-async def del_welcome(event):
-    "To turn off or turn on of deleting previous welcome message."
+async def set_clean_welcome(event):  # تغيير الاسم هنا
     input_str = event.pattern_match.group(1)
     if input_str == "on":
         if gvarstatus("clean_welcome") is None:
-            return await edit_delete(event, "__Already it was turned on.__")
+            return await edit_delete(event, "✓ تم تفعيل حذف الترحيب السابق بالفعل")
         delgvar("clean_welcome")
         return await edit_delete(
             event,
-            "__From now on previous welcome message will be deleted and new welcome message will be sent.__",
+            "✓ من الآن سيتم حذف الترحيب السابق وإرسال ترحيب جديد",
         )
     if gvarstatus("clean_welcome") is None:
         addgvar("clean_welcome", "false")
         return await edit_delete(
-            event, "__From now on previous welcome message will not be deleted .__"
+            event, "✓ من الآن لن يتم حذف الترحيب السابق"
         )
-    await edit_delete(event, "It was turned off already")
+    await edit_delete(event, "✗ تم تعطيل حذف الترحيب السابق بالفعل")
