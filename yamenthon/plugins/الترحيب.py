@@ -1,6 +1,7 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
-from telethon import events
+from telethon import events, types, functions
 from telethon.utils import get_display_name
+from telethon import functions, types
 
 from yamenthon import zedub
 from yamenthon.core.logger import logging
@@ -36,21 +37,18 @@ async def _(event):  # sourcery no-metrics
         chat = await event.get_chat()
         me = await event.client.get_me()
         title = get_display_name(await event.get_chat()) or "لـ هـذه الدردشـة"
+        count = "?"
+        
+        try:
+            if isinstance(chat, types.Channel):  # سوبرجروب/قناة
+                full = await event.client(functions.channels.GetFullChannelRequest(chat))
+                count = full.full_chat.participants_count
+            else:  # جروب عادي
+                full = await event.client(functions.messages.GetFullChatRequest(chat.id))
+                count = len(full.full_chat.participants.participants)
+        except Exception:
+            pass  # احتياطًا لو فشل الطلب، لا توقف الترحيب
 
-# ...
-        chat = await event.get_chat()
-
-   try:
-      if isinstance(chat, types.Channel):  # سوبرجروب/قناة
-        full = await event.client(functions.channels.GetFullChannelRequest(chat))
-        count = full.full_chat.participants_count
-    else:  # جروب عادي
-        full = await event.client(functions.messages.GetFullChatRequest(chat.id))
-        # في الجروبات العادية ما فيه participants_count مباشر
-        count = len(full.full_chat.participants.participants)
-  except Exception:
-    # احتياطًا لو فشل الطلب، لا توقف الترحيب
-    count = "?"
         mention = "<a href='tg://user?id={}'>{}</a>".format(
             a_user.id, a_user.first_name
         )
@@ -98,7 +96,6 @@ async def _(event):  # sourcery no-metrics
             link_preview=link_preview,
         )
         update_previous_welcome(event.chat_id, current_message.id)
-
 
 @zedub.zed_cmd(
     pattern="ترحيب(?:\s|$)([\s\S]*)",
