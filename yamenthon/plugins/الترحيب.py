@@ -1,6 +1,9 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
 from telethon import events, functions, types
 from telethon.utils import get_display_name
+from datetime import datetime, timedelta
+from telethon.tl.functions.channels import GetParticipantsRequest
+from telethon.tl.types import ChannelParticipantsRecent
 
 from yamenthon import zedub
 from yamenthon.core.logger import logging
@@ -31,44 +34,54 @@ async def welcome_handler(event):
         if not user or user.bot:
             return
 
-        # تغطية كل سيناريوهات الانضمام في السوبرجروب
-        action = getattr(getattr(event, "action_message", None), "action", None)
-        joined = (
-            getattr(event, "user_joined", False) or
-            getattr(event, "user_added", False) or
-            isinstance(action, getattr(types, "MessageActionChatJoinedByLink", ())) or
-            isinstance(action, getattr(types, "MessageActionChatAddUser", ())) or
-            isinstance(action, getattr(types, "MessageActionChatJoinedByRequest", ()))
-        )
-        if not joined:
+        chat = await event.get_chat()
+        me = await event.client.get_me()
+        title = get_display_name(chat) or "لـ هـذه الدردشـة"
+
+        # التحقق من آخر الانضمامات خلال 48 ساعة
+        try:
+            last_48h = datetime.utcnow() - timedelta(hours=48)
+            if isinstance(chat, types.Channel):
+                participants = await event.client(GetParticipantsRequest(
+                    channel=chat,
+                    filter=ChannelParticipantsRecent(),
+                    offset=0,
+                    limit=100  # زيادة إذا كان الجروب كبير
+                ))
+                # تحقق إذا العضو موجود ضمن آخر الانضمامات
+                joined_recently = any(u.id == user.id for u in participants.users)
+                if not joined_recently:
+                    return
+            else:
+                # للجروب العادي يمكن الاعتماد على الانضمام التقليدي
+                joined_recently = getattr(event, "user_joined", False) or getattr(event, "user_added", False)
+                if not joined_recently:
+                    return
+        except Exception as e:
+            LOGS.warning(f"Failed to fetch recent participants: {e}")
             return
 
-        # حذف الترحيب السابق إذا الخيار مفعل (القيمة الافتراضية كما في كودك)
+        # حذف الترحيب السابق إذا الخيار مفعل
         if gvarstatus("clean_welcome") is None:
             try:
                 await event.client.delete_messages(event.chat_id, cws.previous_welcome)
             except Exception as e:
                 LOGS.warning(f"delete previous welcome failed: {e}")
 
-        chat = await event.get_chat()
-        me = await event.client.get_me()
-
-        title = get_display_name(chat) or "لـ هـذه الدردشـة"
-
         # عدّ الأعضاء بطريقة سريعة وآمنة
         count = "?"
         try:
-            if isinstance(chat, types.Channel):  # سوبرجروب/قناة
+            if isinstance(chat, types.Channel):
                 full = await event.client(functions.channels.GetFullChannelRequest(chat))
                 count = full.full_chat.participants_count
-            else:  # جروب عادي
+            else:
                 full = await event.client(functions.messages.GetFullChatRequest(chat.id))
                 parts = getattr(full.full_chat, "participants", None)
                 count = len(parts.participants) if parts and getattr(parts, "participants", None) else "?"
         except Exception as e:
             LOGS.debug(f"participants count fallback: {e}")
 
-        # المتغيّرات القابلة للاستبدال
+        # المتغيرات القابلة للاستبدال
         mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
         my_mention = f"<a href='tg://user?id={me.id}'>{me.first_name}</a>"
         first = user.first_name
@@ -81,7 +94,7 @@ async def welcome_handler(event):
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
 
-        # جلب رسالة الترحيب المحفوظة (نص/ميديا)
+        # جلب رسالة الترحيب المحفوظة
         file_media = None
         current_saved_welcome_message = None
         link_preview = False
@@ -95,7 +108,7 @@ async def welcome_handler(event):
             current_saved_welcome_message = cws.reply
 
         if not current_saved_welcome_message:
-            return  # لا ترحيب محفوظ
+            return
 
         current_message = await event.reply(
             current_saved_welcome_message.format(
@@ -118,6 +131,7 @@ async def welcome_handler(event):
             link_preview=link_preview,
         )
         update_previous_welcome(event.chat_id, current_message.id)
+
     except Exception as e:
         LOGS.error(f"welcome handler error: {e}")
 
