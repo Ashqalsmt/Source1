@@ -21,7 +21,7 @@ def save_adhkar_chats(data):
 adhkar_chats = load_adhkar_chats()
 
 async def get_random_zekr():
-    url = "https://raw.githubusercontent.com/Ashqalsmt/azkar/refs/heads/main/azkar.json"
+    url = "https://raw.githubusercontent.com/Ashqalsmt/azkar/main/azkar.json"
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
